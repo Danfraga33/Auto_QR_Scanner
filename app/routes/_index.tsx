@@ -12,6 +12,7 @@ export default function Index() {
 	return (
 		<>
 			<Link to="/Dashboard">Dashboard</Link>
+			<Link to="/form">Form</Link>
 		</>
 	);
 }
