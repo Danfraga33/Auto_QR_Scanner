@@ -19,10 +19,19 @@ const Dashboard = () => {
 	const data = useLoaderData<typeof loader>();
 
 	return (
-		<div className="flex justify-center items-center h-screen flex-col gap-8 mx-auto">
+		<div className="flex justify-center items-center h-screen  flex-col gap-8 mx-auto">
 			<Link to="/">Home</Link>
 			<h1>Data</h1>
-			<p>Data: {JSON.stringify(data)}</p>
+			<h2>
+				Customers:
+				{data.map((customer) => (
+					<div className="flex justify-between gap-2" key={customer._id}>
+						<p key={customer._id}>
+							{customer.name}: {customer.email}
+						</p>
+					</div>
+				))}
+			</h2>
 		</div>
 	);
 };
