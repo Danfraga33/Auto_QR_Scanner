@@ -31,9 +31,21 @@ const FormComponent = () => {
 				className="flex flex-col items-center justify-center h-screen gap-4"
 			>
 				<label htmlFor="name">Name</label>
-				<input type="text" id="name" className="border" name="name" />
+				<input
+					type="text"
+					id="name"
+					className="border-2 rounded-lg"
+					name="name"
+				/>
 				<label htmlFor="email">Email</label>
-				<input type="text" id="email" className="border" name="email" />
+				<input
+					type="text"
+					id="email"
+					className="border-2 rounded-lg"
+					name="email"
+				/>
+				<label htmlFor="phone">Phone</label>
+				<input type="number" id="phone" className="border-2 rounded-lg" />
 				<button type="submit" className="border border-b-2 p-2 rounded-xl">
 					Submit
 				</button>
