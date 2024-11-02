@@ -6,12 +6,14 @@ import React, { useState } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import DatePicker from 'react-datepicker';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-// import 'react-datepicker/dist/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import enUS from 'date-fns/locale/en-US';
+import * as RDP from 'react-datepicker';
 
 const locales = {
 	'en-US': enUS,
 };
+
 const localizer = dateFnsLocalizer({
 	format,
 	parse,
@@ -45,18 +47,21 @@ const CalendarComp = () => {
 	const [newEvent, setNewEvent] = useState({ title: '', start: '', end: '' });
 	const [allEvents, setAllEvents] = useState(events);
 
-	// function handleAddEvent() {
-	// 	if (newEvent.title && newEvent.start && newEvent.end) {
-	// 		setAllEvents([...allEvents, newEvent]);
-	// 		setNewEvent({ title: '', start: 'null', end: 'null' });
-	// 	}
-	// }
+	const RDPC = (((RDP.default as any).default as any) ||
+		(RDP.default as any) ||
+		(RDP as any)) as typeof RDP.default;
+	function handleAddEvent() {
+		if (newEvent.title && newEvent.start && newEvent.end) {
+			setAllEvents([...allEvents, newEvent]);
+			setNewEvent({ title: '', start: 'null', end: 'null' });
+		}
+	}
 	return (
 		<div>
 			<h1>Calendar</h1>
 			<h2>Add New Event</h2>
 
-			{/* <div>
+			<div>
 				<input
 					type="text"
 					placeholder="Add title"
@@ -64,21 +69,23 @@ const CalendarComp = () => {
 					value={newEvent.title}
 					onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
 				/>
-				<DatePicker
+
+				<RDPC
 					placeholderText="Start Date"
 					style={{ marginRight: '10px' }}
-					selected={newEvent.start}
+					selected={newEvent.start ? new Date(newEvent.start) : null}
 					onChange={(start) => setNewEvent({ ...newEvent, start })}
 				/>
-				<DatePicker
+				<RDPC
 					placeholderText="End Date"
-					selected={newEvent.end}
+					selected={newEvent.end ? new Date(newEvent.end) : null}
 					onChange={(end) => setNewEvent({ ...newEvent, end })}
 				/>
+				{/* <RDPC placeholderText="Start Date" /> */}
 				<button style={{ marginTop: '10px' }} onClick={handleAddEvent}>
 					Add event
 				</button>
-			</div> */}
+			</div>
 
 			<Calendar
 				localizer={localizer}
@@ -86,6 +93,7 @@ const CalendarComp = () => {
 				startAccessor="start"
 				endAccessor="end"
 				style={{ height: 500, margin: '50px' }}
+				selectable={true}
 			/>
 		</div>
 	);
