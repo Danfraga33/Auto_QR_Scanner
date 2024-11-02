@@ -4,8 +4,8 @@ const customerSchema = new mongoose.Schema(
 	{
 		name: { type: String, required: true },
 		email: { type: String, required: true },
-		purchased: Boolean,
-		amountPurchased: Number,
+		purchased: { type: Boolean, default: false },
+		amountPurchased: { type: Number, default: 0.0 },
 		phone: String,
 	},
 	{ collection: 'Customers' }
