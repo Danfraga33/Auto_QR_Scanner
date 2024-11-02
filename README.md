@@ -1,4 +1,5 @@
 USER JOURNEY
+An app where business can run marketing campaigns targeting customers that have scanned on a QR code.
 
 1. User scans the QR code
 2. User is redirected to the form, data is saved to mongodb
@@ -9,12 +10,12 @@ USER JOURNEY
 
 - Customers
 - Customer revenue (mock up with purchases)
+- Calender for owner to play marketing campaign
 
 Components
 
 - Parallel UI
 - [Full Calender](https://fullcalendar.io/)
-- Shadcn Tabs (Calender/Analysis)
 
 #### Tools
 
