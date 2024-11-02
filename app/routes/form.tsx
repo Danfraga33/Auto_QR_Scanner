@@ -1,5 +1,6 @@
 import { ActionFunctionArgs } from '@remix-run/node';
 import { Form, Link } from '@remix-run/react';
+import { redirect } from '@remix-run/node';
 import Customer from '~/Models/Customer';
 import { connectDB } from '~/utils/db';
 export async function action({ request }: ActionFunctionArgs) {
@@ -11,11 +12,14 @@ export async function action({ request }: ActionFunctionArgs) {
 		const newCustomer = new Customer({
 			name: name,
 			email: email,
+			amount: 0,
+			Purchased: false,
 		});
 
 		console.log('New Customer', newCustomer);
 		const result = await newCustomer.save();
 		console.log('Result', result);
+		redirect('/Dashboard');
 		return result;
 	} catch (err) {
 		console.error(err);
