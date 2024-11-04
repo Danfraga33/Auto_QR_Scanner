@@ -1,0 +1,23 @@
+[
+	{
+		"id": 1,
+		"campaignName": "Free Coffee",
+		"type": "brickNMortar"
+	},
+	{
+		"id": 2,
+		"campaignName": "Kids Eat Free",
+		"type": "brickNMortar"
+	},
+	{
+		"id": 3,
+
+		"campaignName": "Weekend Frenzy",
+		"type": "brickNMortar"
+	},
+	{
+		"id": 4,
+		"campaignName": "10% Off Selected Products",
+		"type": "digitalMarketing"
+	}
+]

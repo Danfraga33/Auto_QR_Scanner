@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import campaigns from '~/lib/data/campaigns.json';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/src/style.css';
 const CampaignBuilder = () => {
@@ -14,22 +14,21 @@ const CampaignBuilder = () => {
 					Create New Campaign
 				</button>
 				<h1>Mass Blast Marketing Campaigns</h1>
-				<ul className="border-2 rounded-lg py-1 px-2 border-gray-500 flex-1 flex gap-2 flex-col overflow-scroll">
-					<button className="flex justify-start hover:text-lime-500 transition-all">
-						<li value="BuyOneGetOne">Free Coffee</li>
-					</button>
-					<button className="flex justify-start hover:text-lime-500 transition-all">
-						<li value="KidsEatForFree">Kids Eat Free</li>
-					</button>
-					<button className="flex justify-start hover:text-lime-500 transition-all">
-						<li value="WeekendFrenzy">Weekend Frenzy</li>
-					</button>
-					<button className="flex justify-start hover:text-lime-500 transition-all">
-						<li value="10offSelectedProducts" id="digitalMarketing">
-							10% Off Selected Products
-						</li>
-					</button>
-				</ul>
+				{campaigns.map((campaign) => (
+					<ul
+						className="border-2 rounded-lg py-1 px-2 border-gray-500 flex-1 flex gap-2 flex-col overflow-scroll"
+						key={campaign.id}
+					>
+						<button
+							className="flex justify-start hover:text-lime-500 transition-all"
+							onClick={() => setMarketingCampaign(campaign.campaignName)}
+						>
+							<li value="BuyOneGetOne" id={campaign.type}>
+								{campaign.campaignName}
+							</li>
+						</button>
+					</ul>
+				))}
 			</div>
 			<div>
 				<h1 className="w-1/2">Schedule</h1>
