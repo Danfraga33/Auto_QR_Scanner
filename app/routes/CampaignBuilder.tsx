@@ -2,10 +2,34 @@ import { useState } from 'react';
 import campaigns from '~/lib/data/campaigns.json';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/src/style.css';
+type Campaign = {
+	campaignName: string;
+	startDate: string;
+	endDate: string;
+};
+
 const CampaignBuilder = () => {
 	const [selected, setSelected] = useState<Date[] | undefined>();
-	const [marketingCampaign, setMarketingCampaign] = useState<string>('');
-	console.log(selected?.length);
+	const [marketingCampaign, setMarketingCampaign] = useState<any>({
+		campaignName: '',
+		startDate: '',
+		endDate: '',
+	});
+
+	const updateCampaign = (
+		campaignName: string,
+		campaignStartDate: string,
+		campaignEndDate: string
+	) => {
+		setMarketingCampaign((prevCampaign: Campaign) => ({
+			...prevCampaign,
+			campaignName: campaignName,
+			startDate: campaignStartDate,
+			endDate: campaignEndDate,
+		}));
+	};
+	console.log(marketingCampaign);
+
 	return (
 		// <div className="flex justify-center w-full items-center h-screen ">
 		<div className="flex justify-around py-2">
@@ -13,18 +37,43 @@ const CampaignBuilder = () => {
 				<button className="border-gray-400 border rounded-lg hover:border-2 hover:transition-all ">
 					Create New Campaign
 				</button>
-				<h1>Mass Blast Marketing Campaigns</h1>
+				<button className="border-gray-400 border rounded-lg hover:border-2 hover:transition-all ">
+					Edit Campaign Campaign
+				</button>
+				<button className="border-red-500 border rounded-lg hover:border-2 hover:transition-all ">
+					Delete Campaign
+				</button>
+				<hr />
+				<h1 className="underline ">Mass Blast Marketing Campaigns</h1>
 				{campaigns.map((campaign) => (
 					<ul
-						className="border-2 rounded-lg py-1 px-2 border-gray-500 flex-1 flex gap-2 flex-col overflow-scroll"
+						className="border-2 rounded-lg p-3 border-gray-500 flex-1 flex gap-2 flex-col overflow-scroll"
 						key={campaign.id}
 					>
 						<button
 							className="flex justify-start hover:text-lime-500 transition-all"
-							onClick={() => setMarketingCampaign(campaign.campaignName)}
+							onClick={() =>
+								updateCampaign(
+									campaign.campaignName,
+									campaign.startDate,
+									campaign.endDate
+								)
+							}
 						>
-							<li value="BuyOneGetOne" id={campaign.type}>
-								{campaign.campaignName}
+							<li
+								value="BuyOneGetOne"
+								id={campaign.type}
+								className="flex flex-col gap-2"
+							>
+								<h1 className="font-semibold">{campaign.campaignName}</h1>
+								<p className="text-start">
+									Start Date: <br />
+									<span>{campaign.startDate}</span>
+								</p>
+								<p className="text-start">
+									End Date: <br />
+									<span>{campaign.endDate}</span>
+								</p>
 							</li>
 						</button>
 					</ul>
@@ -40,10 +89,20 @@ const CampaignBuilder = () => {
 					<ul>
 						{selected.map((entry) => (
 							<div key={entry.toISOString()}>
+								<h1>{marketingCampaign.campaignName}</h1>
 								<li>{entry.toISOString()}</li>
 							</div>
 						))}
 					</ul>
+				)}
+				{!marketingCampaign.campaignName ? (
+					<p>Select a campaign</p>
+				) : (
+					<div>
+						<h1 className="font-semibold">{marketingCampaign.campaignName}</h1>
+						<p>{marketingCampaign.startDate}</p>
+						<p>{marketingCampaign.endDate}</p>
+					</div>
 				)}
 			</div>
 			<div className="flex flex-col justify-start gap-1">
