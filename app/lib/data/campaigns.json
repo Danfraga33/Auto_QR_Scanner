@@ -2,21 +2,28 @@
 	{
 		"id": 1,
 		"campaignName": "Free Coffee",
-		"type": "brickNMortar"
+		"type": "brickNMortar",
+		"startDate": "2024-11-01T00:00:00.000Z",
+		"endDate": "2024-11-03T00:00:00.000Z"
 	},
 	{
 		"id": 2,
 		"campaignName": "Kids Eat Free",
-		"type": "brickNMortar"
+		"type": "brickNMortar",
+		"startDate": "2024-11-03T00:00:00.000Z",
+		"endDate": "2024-11-09T00:00:00.000Z"
 	},
 	{
 		"id": 3,
-
+		"startDate": "2024-11-012T00:00:00.000Z",
+		"endDate": "2024-11-15T00:00:00.000Z",
 		"campaignName": "Weekend Frenzy",
 		"type": "brickNMortar"
 	},
 	{
 		"id": 4,
+		"startDate": "2024-11-17T00:00:00.000Z",
+		"endDate": "2024-11-20T00:00:00.000Z",
 		"campaignName": "10% Off Selected Products",
 		"type": "digitalMarketing"
 	}
