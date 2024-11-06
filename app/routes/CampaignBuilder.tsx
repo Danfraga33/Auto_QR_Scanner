@@ -2,6 +2,7 @@ import { useState } from 'react';
 import campaigns from '~/lib/data/campaigns.json';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/src/style.css';
+import { Link } from '@remix-run/react';
 type Campaign = {
 	campaignName: string;
 	startDate: string;
@@ -9,13 +10,21 @@ type Campaign = {
 };
 
 const CampaignBuilder = () => {
-	const [selected, setSelected] = useState<Date[] | undefined>();
+	const [campaignDates, setCampaignDates] = useState<Date[] | undefined>();
+	const [newCampaignDates, setNewCampaignDates] = useState<
+		Date[] | undefined
+	>();
 	const [marketingCampaign, setMarketingCampaign] = useState<any>({
 		campaignName: '',
 		startDate: '',
 		endDate: '',
 	});
 
+	const marketingCampaignDates: Date[] = [];
+	campaigns.map((campaign) => {
+		const date = new Date(campaign.startDate);
+		marketingCampaignDates.push(date);
+	});
 	const updateCampaign = (
 		campaignName: string,
 		campaignStartDate: string,
@@ -28,15 +37,58 @@ const CampaignBuilder = () => {
 			endDate: campaignEndDate,
 		}));
 	};
-	console.log(marketingCampaign);
+
+	const handleNewCampaign = (date) => {
+		setNewCampaignDates(date);
+	};
+
+	if (newCampaignDates) {
+		console.log(newCampaignDates[4] ?? '');
+	}
 
 	return (
 		// <div className="flex justify-center w-full items-center h-screen ">
 		<div className="flex justify-around py-2">
 			<div className="flex flex-col gap-4">
-				<button className="border-gray-400 border rounded-lg hover:border-2 hover:transition-all ">
+				<Link
+					className="border-gray-400 border rounded-lg hover:border-2 hover:transition-all"
+					to="/Create"
+				>
 					Create New Campaign
-				</button>
+				</Link>
+				<form className="flex flex-col">
+					<label htmlFor="campaignName">Campaign Name</label>
+					<input
+						type="text"
+						id="campaignName"
+						className="border-2 border-gray-300 rounded-lg px-1"
+					/>
+					<label htmlFor="date">Select "Send-out" date</label>
+					<select
+						id="date"
+						className="border-2 border-gray-300 rounded-lg px-1  "
+					>
+						<option value="">Put</option>
+						<option value="">a</option>
+						<option value="">Calendar</option>
+						<option value="">Here</option>
+					</select>
+					<label htmlFor="method">Method</label>
+					<select
+						name="method"
+						id="Method"
+						className="border-2 border-gray-300 rounded-lg px-1  "
+					>
+						<option value="">SMS</option>
+						<option value="">Email</option>
+					</select>
+					<div className="flex flex-col gap-1 mt-2 border-lg border-1 ">
+						<button className="text-sm border-lg border-1">SMS Template</button>
+						<button>Email Template</button>
+					</div>
+					<button type="submit">Add Campaign</button>
+				</form>
+				<hr />
 				<button className="border-gray-400 border rounded-lg hover:border-2 hover:transition-all ">
 					Edit Campaign Campaign
 				</button>
@@ -81,16 +133,16 @@ const CampaignBuilder = () => {
 			</div>
 			<div>
 				<h1 className="w-1/2">Schedule</h1>
-				{!selected?.length ? (
+				{!campaignDates?.length ? (
 					<>
 						<p>Please select a Date</p>
 					</>
 				) : (
 					<ul>
-						{selected.map((entry) => (
-							<div key={entry.toISOString()}>
-								<h1>{marketingCampaign.campaignName}</h1>
-								<li>{entry.toISOString()}</li>
+						{campaignDates?.map((entry) => (
+							<div key={entry.toString()}>
+								{/* <h1>{marketingCampaign.campaignName}</h1> */}
+								<li>{entry.toString()}</li>
 							</div>
 						))}
 					</ul>
@@ -100,17 +152,22 @@ const CampaignBuilder = () => {
 				) : (
 					<div>
 						<h1 className="font-semibold">{marketingCampaign.campaignName}</h1>
-						<p>{marketingCampaign.startDate}</p>
-						<p>{marketingCampaign.endDate}</p>
+						<p>
+							Start Date: <span>{marketingCampaign.startDate}</span>
+						</p>
+						<p>
+							End Date: <span>{marketingCampaign.endDate}</span>
+						</p>
 					</div>
 				)}
 			</div>
 			<div className="flex flex-col justify-start gap-1">
 				<DayPicker
 					mode="multiple"
-					selected={selected}
-					onSelect={setSelected}
-					onDayClick={() => setMarketingCampaign('')}
+					// selected={selected}
+					selected={marketingCampaignDates}
+					onSelect={setNewCampaignDates}
+					onDayClick={() => console.log('Hello')}
 				/>
 				<div className="flex flex-col gap-2">
 					<h1 className="font-semibold underline">Filter</h1>
