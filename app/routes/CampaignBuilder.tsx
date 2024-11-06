@@ -56,6 +56,7 @@ const CampaignBuilder = () => {
 				>
 					Create New Campaign
 				</Link>
+				<hr />
 				<form className="flex flex-col">
 					<label htmlFor="campaignName">Campaign Name</label>
 					<input
@@ -63,16 +64,27 @@ const CampaignBuilder = () => {
 						id="campaignName"
 						className="border-2 border-gray-300 rounded-lg px-1"
 					/>
-					<label htmlFor="date">Select "Send-out" date</label>
-					<select
-						id="date"
-						className="border-2 border-gray-300 rounded-lg px-1  "
-					>
-						<option value="">Put</option>
-						<option value="">a</option>
-						<option value="">Calendar</option>
-						<option value="">Here</option>
-					</select>
+					<label htmlFor="">Select campaign type</label>
+					<div className="flex flex-col gap-2">
+						<select
+							name="campaignType"
+							id="campaignType"
+							className="border-2 rounded-lg px-1"
+						>
+							<option value="">One-Off</option>
+							<option value="">Period</option>
+						</select>
+						<label htmlFor="date">Select "Send-out" date</label>
+						<select
+							id="date"
+							className="border-2 border-gray-300 rounded-lg px-1  "
+						>
+							<option value="">Put</option>
+							<option value="">a</option>
+							<option value="">Calendar</option>
+							<option value="">Here</option>
+						</select>
+					</div>
 					<label htmlFor="method">Method</label>
 					<select
 						name="method"
@@ -86,6 +98,7 @@ const CampaignBuilder = () => {
 						<button className="text-sm border-lg border-1">SMS Template</button>
 						<button>Email Template</button>
 					</div>
+
 					<button type="submit">Add Campaign</button>
 				</form>
 				<hr />
