@@ -42,9 +42,14 @@ Components
 - Instantly: Lead Automated Outreach
 - Shadcn project management [Block](https://ui.shadcn.com/blocks)
 
+#### Ideas
+
+- [Form Layout](https://dribbble.com/shots/24926472-Campaign-Saas-Web-App-Dashboard-Create-Campaign-Component)
+
 #### To do later
 
 - Audience segmentation
 - If a business owner wants to run a sms marketing campaign, every friday for one month. There would then be a start and end date. Additionally, scripts to include.
 - Instagram Ads
 - Google Ads API
+- Gamify create new campaign
