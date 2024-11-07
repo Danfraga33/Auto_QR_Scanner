@@ -50,6 +50,7 @@ const CampaignBuilder = () => {
 		// <div className="flex justify-center w-full items-center h-screen ">
 		<div className="flex justify-around py-2">
 			<div className="flex flex-col gap-4">
+				<Link to="/Dashboard">Dashboard</Link>
 				<Link
 					className="border-gray-400 border rounded-lg hover:border-2 hover:transition-all"
 					to="/Create"
@@ -171,6 +172,19 @@ const CampaignBuilder = () => {
 						<p>
 							End Date: <span>{marketingCampaign.endDate}</span>
 						</p>
+						<div className="flex flex-col gap-2 ">
+							<button className="border rounded-lg px-1 inline border-orange-400">
+								Change Frequency
+							</button>
+							<div className="flex gap-1 w-full">
+								<button className="border rounded-lg p-1 border-red-600 bg-gray-200 ">
+									Delete
+								</button>
+								<button className="border rounded-lg p-1 border-yellow-200 bg-gray-200 ">
+									Edit
+								</button>
+							</div>
+						</div>
 					</div>
 				)}
 			</div>
