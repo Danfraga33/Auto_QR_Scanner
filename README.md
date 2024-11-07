@@ -40,13 +40,23 @@ Components
 - Phatom Builder: PAID (Lead collection)
 - Anymail finder
 - Instantly: Lead Automated Outreach
-- Shadcn project management [Block](https://ui.shadcn.com/blocks)
+- Twillo communication API: Send out SMS and Email
+- v0 Shadcn project management [Block](https://v0.dev/chat/Gwr1KoyJK0i)
+- Setup sentry crons
 
 #### Ideas
 
 - [Form Layout](https://dribbble.com/shots/24926472-Campaign-Saas-Web-App-Dashboard-Create-Campaign-Component)
 
-#### To do later
+#### To Do
+
+- Save campaign to DB
+- Make campaign creation work.
+- Transition to Shadcn
+- Make auth section (Middleware)
+- Set up Email/Sms with twillo
+
+#### To do Later
 
 - Audience segmentation
 - If a business owner wants to run a sms marketing campaign, every friday for one month. There would then be a start and end date. Additionally, scripts to include.
