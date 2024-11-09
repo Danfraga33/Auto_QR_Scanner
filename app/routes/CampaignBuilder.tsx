@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import campaigns from '~/lib/data/campaigns.json';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/src/style.css';
-import { Form, Link } from '@remix-run/react';
+import { Form, Link, json, useLoaderData } from '@remix-run/react';
 import { ActionFunctionArgs } from '@remix-run/node';
 import { createCampaign, getCampaign } from '~/utils/actions';
 type Campaign = {
@@ -23,8 +22,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export async function loader() {
-	const data = await getCampaign();
-	return data;
+	return json(await getCampaign());
 }
 
 const CampaignBuilder = () => {
@@ -32,6 +30,8 @@ const CampaignBuilder = () => {
 	const [newCampaignDates, setNewCampaignDates] = useState<
 		Date[] | undefined
 	>();
+	const campaigns = useLoaderData<typeof loader>();
+
 	const [marketingCampaign, setMarketingCampaign] = useState<any>({
 		campaignName: '',
 		startDate: '',
@@ -39,10 +39,11 @@ const CampaignBuilder = () => {
 	});
 
 	const marketingCampaignDates: Date[] = [];
-	campaigns.map((campaign) => {
+	campaigns?.map((campaign) => {
 		const date = new Date(campaign.startDate);
 		marketingCampaignDates.push(date);
 	});
+
 	const updateCampaign = (
 		campaignName: string,
 		campaignStartDate: string,
@@ -102,6 +103,16 @@ const CampaignBuilder = () => {
 							<option value="">Calendar</option>
 							<option value="">Here</option>
 						</select>
+						<label htmlFor="date">Select "Send-out" end-date</label>
+						<select
+							id="date"
+							className="border-2 border-gray-300 rounded-lg px-1"
+							name="date"
+							defaultValue="Random Date"
+							required
+						>
+							<option value="EndDate">Put</option>
+						</select>
 					</div>
 					<label htmlFor="method">Method</label>
 					<select
@@ -112,6 +123,18 @@ const CampaignBuilder = () => {
 					>
 						<option value="SMS">SMS</option>
 						<option value="Email">Email</option>
+					</select>
+					<label htmlFor="frequency">Frequency</label>
+					<select
+						name="frequency"
+						id="frequency"
+						className="border-2 border-gray-300 rounded-lg px-1"
+						required
+					>
+						<option value="weekly">insert</option>
+						<option value="Email">calender</option>
+						<option value="Email">or </option>
+						<option value="Email">some other form </option>
 					</select>
 					<div className="flex flex-col gap-1 mt-2 border-lg border-1 ">
 						<button className="text-sm border-lg border-1">SMS Template</button>
@@ -138,7 +161,7 @@ const CampaignBuilder = () => {
 							className="flex justify-start hover:text-lime-500 transition-all"
 							onClick={() =>
 								updateCampaign(
-									campaign.campaignName,
+									campaign.name,
 									campaign.startDate,
 									campaign.endDate
 								)
@@ -149,7 +172,7 @@ const CampaignBuilder = () => {
 								id={campaign.type}
 								className="flex flex-col gap-2"
 							>
-								<h1 className="font-semibold">{campaign.campaignName}</h1>
+								<h1 className="font-semibold">{campaign.name}</h1>
 								<p className="text-start">
 									Start Date: <br />
 									<span>{campaign.startDate}</span>
