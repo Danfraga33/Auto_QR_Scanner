@@ -43,6 +43,7 @@ Components
 - Twillo communication API: Send out SMS and Email
 - v0 Shadcn project management [Block](https://v0.dev/chat/Gwr1KoyJK0i)
 - Setup sentry crons
+- [Inngest](https://www.inngest.com/)
 
 #### Ideas
 
@@ -51,6 +52,8 @@ Components
 #### To Do
 
 - Save campaign to DB
+- Move Create Customer Fn to actions
+- Change Date type on Campaign(Date field) to Date
 - Make campaign creation work.
 - Transition to Shadcn
 - Make auth section (Middleware)
