@@ -2,12 +2,30 @@ import { useState } from 'react';
 import campaigns from '~/lib/data/campaigns.json';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/src/style.css';
-import { Link } from '@remix-run/react';
+import { Form, Link } from '@remix-run/react';
+import { ActionFunctionArgs } from '@remix-run/node';
+import { createCampaign, getCampaign } from '~/utils/actions';
 type Campaign = {
 	campaignName: string;
 	startDate: string;
 	endDate: string;
 };
+
+export async function action({ request }: ActionFunctionArgs) {
+	const body = await request.formData();
+	const name = body.get('name');
+	const campaignType = body.get('campaignType');
+	const date = body.get('date');
+	const method = body.get('method');
+	const response = createCampaign({ method, date, campaignType, name });
+	console.log(response);
+	return body;
+}
+
+export async function loader() {
+	const data = await getCampaign();
+	return data;
+}
 
 const CampaignBuilder = () => {
 	const [campaignDates, setCampaignDates] = useState<Date[] | undefined>();
@@ -38,14 +56,6 @@ const CampaignBuilder = () => {
 		}));
 	};
 
-	const handleNewCampaign = (date) => {
-		setNewCampaignDates(date);
-	};
-
-	if (newCampaignDates) {
-		console.log(newCampaignDates[4] ?? '');
-	}
-
 	return (
 		// <div className="flex justify-center w-full items-center h-screen ">
 		<div className="flex justify-around py-2">
@@ -58,12 +68,15 @@ const CampaignBuilder = () => {
 					Create New Campaign
 				</Link>
 				<hr />
-				<form className="flex flex-col">
+				<Form method="post" className="flex flex-col">
 					<label htmlFor="campaignName">Campaign Name</label>
 					<input
+						defaultValue="Untitled"
 						type="text"
+						name="name"
 						id="campaignName"
 						className="border-2 border-gray-300 rounded-lg px-1"
+						required
 					/>
 					<label htmlFor="">Select campaign type</label>
 					<div className="flex flex-col gap-2">
@@ -71,16 +84,20 @@ const CampaignBuilder = () => {
 							name="campaignType"
 							id="campaignType"
 							className="border-2 rounded-lg px-1"
+							required
 						>
-							<option value="">One-Off</option>
-							<option value="">Period</option>
+							<option value="oneOff">One-Off</option>
+							<option value="period">Period</option>
 						</select>
 						<label htmlFor="date">Select "Send-out" date</label>
 						<select
 							id="date"
-							className="border-2 border-gray-300 rounded-lg px-1  "
+							className="border-2 border-gray-300 rounded-lg px-1"
+							name="date"
+							defaultValue="Random Date"
+							required
 						>
-							<option value="">Put</option>
+							<option value="Untitled">Put</option>
 							<option value="">a</option>
 							<option value="">Calendar</option>
 							<option value="">Here</option>
@@ -90,10 +107,11 @@ const CampaignBuilder = () => {
 					<select
 						name="method"
 						id="Method"
-						className="border-2 border-gray-300 rounded-lg px-1  "
+						className="border-2 border-gray-300 rounded-lg px-1"
+						required
 					>
-						<option value="">SMS</option>
-						<option value="">Email</option>
+						<option value="SMS">SMS</option>
+						<option value="Email">Email</option>
 					</select>
 					<div className="flex flex-col gap-1 mt-2 border-lg border-1 ">
 						<button className="text-sm border-lg border-1">SMS Template</button>
@@ -101,7 +119,7 @@ const CampaignBuilder = () => {
 					</div>
 
 					<button type="submit">Add Campaign</button>
-				</form>
+				</Form>
 				<hr />
 				<button className="border-gray-400 border rounded-lg hover:border-2 hover:transition-all ">
 					Edit Campaign Campaign
