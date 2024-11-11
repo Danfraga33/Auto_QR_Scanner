@@ -16,18 +16,21 @@ export async function createCampaign({
 	name,
 	method,
 	campaignType,
-	date,
+	startDate,
+	endDate,
 }: {
-	name: string;
-	method: string;
-	campaignType: string;
-	date: string;
+	name: FormDataEntryValue | null;
+	method: FormDataEntryValue | null;
+	campaignType: FormDataEntryValue | null;
+	startDate: FormDataEntryValue | null;
+	endDate: FormDataEntryValue | null;
 }) {
 	const newCampaign = new Campaign({
 		name,
 		method,
 		campaignType,
-		date,
+		startDate,
+		endDate,
 	});
 
 	const result = await newCampaign.save();
