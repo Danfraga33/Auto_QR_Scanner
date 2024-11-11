@@ -46,11 +46,14 @@ const CampaignBuilder = () => {
 		endDate: '',
 	});
 
-	const marketingCampaignDates: Date[] = [];
+	const marketingCampaignDates: Date[] = [new Date()];
 	campaigns?.map((campaign) => {
 		const date = new Date(campaign.startDate);
-		marketingCampaignDates.push(date);
+		console.log(date);
+		marketingCampaignDates.push(new Date());
 	});
+
+	console.log(marketingCampaignDates);
 
 	const updateCampaign = (
 		campaignName: string,
@@ -148,16 +151,10 @@ const CampaignBuilder = () => {
 						<button className="text-sm border-lg border-1">SMS Template</button>
 						<button>Email Template</button>
 					</div>
-
 					<button type="submit">Add Campaign</button>
 				</Form>
 				<hr />
-				<button className="border-gray-400 border rounded-lg hover:border-2 hover:transition-all ">
-					Edit Campaign Campaign
-				</button>
-				<button className="border-red-500 border rounded-lg hover:border-2 hover:transition-all ">
-					Delete Campaign
-				</button>
+
 				<hr />
 				<h1 className="underline ">Mass Blast Marketing Campaigns</h1>
 				{campaigns.map((campaign) => (
