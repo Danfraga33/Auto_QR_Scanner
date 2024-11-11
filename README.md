@@ -51,10 +51,12 @@ Components
 
 #### To Do
 
+- Move Create Customer Fn to actions module
 - Save campaign to DB
-- Move Create Customer Fn to actions
+- Campaign data is being saved to customer data
 - Change Date type on Campaign(Date field) to Date
 - Make campaign creation work.
+- Add calendar to date form inputs
 - Transition to Shadcn
 - Make auth section (Middleware)
 - Set up Email/Sms with twillo
