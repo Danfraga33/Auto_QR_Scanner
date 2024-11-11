@@ -14,9 +14,16 @@ export async function action({ request }: ActionFunctionArgs) {
 	const body = await request.formData();
 	const name = body.get('name');
 	const campaignType = body.get('campaignType');
-	const date = body.get('date');
+	const startDate = body.get('startDate');
+	const endDate = body.get('endDate');
 	const method = body.get('method');
-	const response = createCampaign({ method, date, campaignType, name });
+	const response = createCampaign({
+		method,
+		startDate,
+		endDate,
+		campaignType,
+		name,
+	});
 	console.log(response);
 	return body;
 }
@@ -30,6 +37,7 @@ const CampaignBuilder = () => {
 	const [newCampaignDates, setNewCampaignDates] = useState<
 		Date[] | undefined
 	>();
+
 	const campaigns = useLoaderData<typeof loader>();
 
 	const [marketingCampaign, setMarketingCampaign] = useState<any>({
@@ -90,11 +98,11 @@ const CampaignBuilder = () => {
 							<option value="oneOff">One-Off</option>
 							<option value="period">Period</option>
 						</select>
-						<label htmlFor="date">Select "Send-out" date</label>
+						<label htmlFor="date">Select "Send-out" start date</label>
 						<select
 							id="date"
 							className="border-2 border-gray-300 rounded-lg px-1"
-							name="date"
+							name="startDate"
 							defaultValue="Random Date"
 							required
 						>
@@ -107,7 +115,7 @@ const CampaignBuilder = () => {
 						<select
 							id="date"
 							className="border-2 border-gray-300 rounded-lg px-1"
-							name="date"
+							name="endDate"
 							defaultValue="Random Date"
 							required
 						>
@@ -174,7 +182,8 @@ const CampaignBuilder = () => {
 							>
 								<h1 className="font-semibold">{campaign.name}</h1>
 								<p className="text-start">
-									Start Date: <br />
+									Start Date:
+									<br />
 									<span>{campaign.startDate}</span>
 								</p>
 								<p className="text-start">
