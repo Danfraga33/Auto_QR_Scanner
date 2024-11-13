@@ -1,6 +1,18 @@
 import type { MetaFunction } from '@remix-run/node';
 import { Link } from '@remix-run/react';
-import { authenticator } from '~/services/auth.server';
+import { Form, useLoaderData } from '@remix-run/react';
+import { ActionFunction, LoaderFunction } from '@remix-run/node';
+import authenticator from '~/services/auth.server';
+
+export let loader: LoaderFunction = async ({ request }) => {
+	return await authenticator.isAuthenticated(request, {
+		failureRedirect: '/login',
+	});
+};
+
+export const action: ActionFunction = async ({ request }) => {
+	await authenticator.logout(request, { redirectTo: '/login' });
+};
 
 export const meta: MetaFunction = () => {
 	return [
@@ -10,11 +22,21 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+	const data = useLoaderData();
 	return (
 		<div className="flex justify-center h-screen items-center flex-col">
 			<Link to="/Dashboard" className="items-start">
 				Dashboard
 			</Link>
+			<div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
+				<h1>Welcome to Remix Protected Dashboard</h1>
+				<p>
+					{data?.name} {data?.token}
+				</p>
+				<Form method="post">
+					<button>Log Out</button>
+				</Form>
+			</div>
 			<Link to="/form" className="items-start">
 				Form
 			</Link>
@@ -26,27 +48,4 @@ export default function Index() {
 			</Link>
 		</div>
 	);
-}
-
-let user = await authenticator.isAuthenticated(request, {
-	failureRedirect: '/login',
-});
-
-// if the user is authenticated, redirect to /dashboard
-let user = await authenticator.isAuthenticated(request, {
-	failureRedirect: '/login',
-});
-
-// if the user is authenticated, redirect to /dashboard
-await authenticator.isAuthenticated(request, {
-	successRedirect: '/dashboard',
-});
-
-// get the user or null, and do different things in your loader/action based on
-// the result
-user = await authenticator.isAuthenticated(request);
-if (user) {
-	// here the user is authenticated
-} else {
-	// here the user is not authenticated
 }
