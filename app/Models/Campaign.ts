@@ -5,7 +5,6 @@ const campaignSchema = new mongoose.Schema({
 	campaignType: { type: String, required: true },
 	startDate: { type: String, required: true },
 	endDate: { type: String, required: true },
-	date: { type: String, required: true },
 	method: { type: String, required: true },
 });
 
