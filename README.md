@@ -37,7 +37,12 @@ Components
 - User Presses "Activate Campaign" button to activate
 - User can delete campaign
 - User can edit campaign
--
+
+#### Database Models/Schema
+
+- Business (linked)
+- Customer (linked)
+- Campaigns (linked)
 
 #### Tools
 
