@@ -3,6 +3,12 @@ import { Link } from '@remix-run/react';
 import { Form, useLoaderData } from '@remix-run/react';
 import { ActionFunction, LoaderFunction } from '@remix-run/node';
 import authenticator from '~/services/auth.server';
+export const meta: MetaFunction = () => {
+	return [
+		{ title: 'QR Scanner' },
+		{ name: 'description', content: 'Marketing Automation App' },
+	];
+};
 
 export let loader: LoaderFunction = async ({ request }) => {
 	return await authenticator.isAuthenticated(request, {
@@ -14,22 +20,16 @@ export const action: ActionFunction = async ({ request }) => {
 	await authenticator.logout(request, { redirectTo: '/login' });
 };
 
-export const meta: MetaFunction = () => {
-	return [
-		{ title: 'QR Scanner' },
-		{ name: 'description', content: 'Marketing Automation App' },
-	];
-};
-
 export default function Index() {
 	const data = useLoaderData();
+	console.log(data);
 	return (
 		<div className="flex justify-center h-screen items-center flex-col">
 			<Link to="/Dashboard" className="items-start">
 				Dashboard
 			</Link>
 			<div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
-				<h1>Welcome to Remix Protected Dashboard</h1>
+				<h1>Welcome to a Remix Protected Dashboard</h1>
 				<p>
 					{data?.name} {data?.token}
 				</p>

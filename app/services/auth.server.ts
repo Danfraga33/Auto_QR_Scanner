@@ -32,7 +32,7 @@ authenticator.use(
 			);
 
 		// login the user, this could be whatever process you want
-		if (email === 'aaron@mail.com' && password === 'password') {
+		if (email === 'daniel@gmail.com' && password === 'password') {
 			user = {
 				name: email,
 				token: `${password}-${new Date().getTime()}`,

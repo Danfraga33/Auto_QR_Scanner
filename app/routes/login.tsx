@@ -13,7 +13,7 @@ import { sessionStorage } from '~/services/session.server';
 export const action: ActionFunction = async ({ request, context }) => {
 	// call my authenticator
 	const resp = await authenticator.authenticate('form', request, {
-		successRedirect: '/',
+		successRedirect: '/SignupForm',
 		failureRedirect: '/login',
 		throwOnError: true,
 		context,
