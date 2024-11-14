@@ -1,18 +1,35 @@
 import { ActionFunctionArgs } from '@remix-run/node';
 import { Form } from '@remix-run/react';
 import React from 'react';
+import { createProfile } from '~/utils/actions';
+import { connectDB } from '~/utils/db';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-	const data = await request.formData();
-	const companyName = data.get('companyName');
-	console.log(companyName);
-	return companyName;
+	const formData = await request.formData();
+	const companyName = formData.get('companyName');
+	const companyEmail = formData.get('companyEmail');
+	const companyPhoneNumber = formData.get('companyNumber');
+	try {
+		const newBusiness = await createProfile({
+			companyName,
+			companyEmail,
+			companyPhoneNumber,
+		});
+		console.log(newBusiness);
+		return null;
+	} catch (err) {
+		console.error(err);
+	}
+	return null;
 };
 
-const SignupForm = () => {
+const signUpForm = () => {
 	return (
 		<>
-			<Form className="flex justify-center gap-2 items-center h-screen flex-col">
+			<Form
+				method="post"
+				className="flex justify-center gap-2 items-center h-screen flex-col"
+			>
 				<label htmlFor="companyName">Company Name</label>
 				<input
 					type="text"
@@ -45,4 +62,4 @@ const SignupForm = () => {
 	);
 };
 
-export default SignupForm;
+export default signUpForm;

@@ -1,5 +1,30 @@
 import Campaign from '~/Models/Campaign';
 import { connectDB } from './db';
+import BusinessProfiles from '~/Models/BusinessProfiles';
+
+export async function createProfile({
+	companyName,
+	companyEmail,
+	companyPhoneNumber,
+}: {
+	companyName: FormDataEntryValue | null;
+	companyEmail: FormDataEntryValue | null;
+	companyPhoneNumber: FormDataEntryValue | null;
+}) {
+	try {
+		connectDB();
+		const newProfile = new BusinessProfiles({
+			companyName,
+			companyEmail,
+			companyPhoneNumber,
+		});
+		const newBusiness = await newProfile.save();
+		console.log('New Business Saved:', newBusiness);
+		return newBusiness;
+	} catch (error) {
+		console.error(error);
+	}
+}
 
 export async function getCampaign() {
 	connectDB();
