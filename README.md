@@ -28,10 +28,11 @@ Components
 - Parallel UI
 - [Full Calender](https://fullcalendar.io/)
 
-#### Campaign Builder
+#### User Journey
 
-- User selects campaign
-- User selects dates
+- User creates profile, putting in details such as phone number, email, business name and more.
+- User redirected to dashboard
+- User creates campaign (selecting audience, method, dates, frequency)
 - User Presses "Activate Campaign" button
 
 #### Tools
