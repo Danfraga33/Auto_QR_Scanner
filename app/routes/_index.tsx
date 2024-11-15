@@ -33,19 +33,23 @@ export default function Index() {
 				<p>
 					{data?.name} {data?.token}
 				</p>
-				<Form method="post">
-					<button>Log Out</button>
-				</Form>
 			</div>
-			<Link to="/form" className="items-start">
+			<Link to="/customerform" className="items-start">
 				Form
 			</Link>
 			<Link to="/campaignBuilder" className="items-start">
 				Campaign Builder
 			</Link>
-			<Link to="/login" className="items-start">
-				Signup
-			</Link>
+			{data ? (
+				<Form method="post">
+					<button>Log Out</button>
+				</Form>
+			) : (
+				<Link to="/login" className="items-start">
+					Sign in
+				</Link>
+			)}
+			{!data ? <Link to="signupForm">Sign in</Link> : null}
 		</div>
 	);
 }
