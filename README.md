@@ -30,8 +30,9 @@ Components
 
 #### User Journey
 
-- User creates profile, putting in details such as phone number, email, business name and more.
-- User redirected to dashboard
+- User logins in
+- If User does not have a profile, a profile is created - putting in details such as phone number, email, business name and more.
+- User is then redirected to dashboard
 - User gets a custom QR Code (later can select their own hook)
 - User creates campaign (selecting audience, method, dates, frequency)
 - User Presses "Activate Campaign" button to activate
