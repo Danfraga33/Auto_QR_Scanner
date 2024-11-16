@@ -30,9 +30,7 @@ Components
 
 #### User Journey
 
-- User logins in
-- If User does not have a profile, a profile is created - putting in details such as phone number, email, business name and more.
-- if
+- User logins in or if no account, user signs up - putting in details such as phone number, email, business name and more.
 - User is then redirected to dashboard
 - User gets a custom QR Code (later can select their own hook)
 - User creates campaign (selecting audience, method, dates, frequency)
@@ -63,6 +61,7 @@ Components
 
 #### To Do
 
+- Save data from Clerk to MongoDB with Webhooks
 - Move Create Customer Fn to actions module
 - Fix Connection Strings for seperate connections
 - Save campaign to DB
