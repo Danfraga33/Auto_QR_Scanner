@@ -32,6 +32,7 @@ Components
 
 - User logins in
 - If User does not have a profile, a profile is created - putting in details such as phone number, email, business name and more.
+- if
 - User is then redirected to dashboard
 - User gets a custom QR Code (later can select their own hook)
 - User creates campaign (selecting audience, method, dates, frequency)
@@ -63,7 +64,9 @@ Components
 #### To Do
 
 - Move Create Customer Fn to actions module
+- Fix Connection Strings for seperate connections
 - Save campaign to DB
+- Save Business Profiles to DB
 - Campaign data is being saved to customer data
 - Change Date type on Campaign(Date field) to Date
 - Make campaign creation work.
