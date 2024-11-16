@@ -6,6 +6,7 @@ import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import { createCampaign, getCampaign } from '~/utils/actions';
 import { getAuth } from '@clerk/remix/ssr.server';
 import { LoaderFunction } from '@remix-run/node';
+import { UserButton } from '@clerk/remix';
 type Campaign = {
 	campaignName: string;
 	startDate: string;
@@ -28,20 +29,21 @@ export async function action({ request }: ActionFunctionArgs) {
 	});
 	console.log(response);
 	redirect('/');
-	return null;
+	return response;
 }
 
 // export const loader: LoaderFunction = async (args) => {
-// 	const { userId } = await getAuth(args);
-// 	if (!userId) {
-// 		return redirect('/sign-in');
-// 	}
 // 	return {};
 // };
 
-export async function loader() {
-	return json(await getCampaign());
-}
+export const loader: LoaderFunction = async (args) => {
+	const { userId } = await getAuth(args);
+	if (!userId) {
+		return redirect('/');
+	}
+	const data = await getCampaign();
+	return json(data);
+};
 
 const CampaignBuilder = () => {
 	const [campaignDates, setCampaignDates] = useState<Date[] | undefined>();
@@ -83,6 +85,7 @@ const CampaignBuilder = () => {
 		// <div className="flex justify-center w-full items-center h-screen ">
 		<div className="flex justify-around py-2">
 			<div className="flex flex-col gap-4">
+				<UserButton />
 				<Link to="/Dashboard">Dashboard</Link>
 				<hr />
 				<div className="underline "> New Campaign</div>
