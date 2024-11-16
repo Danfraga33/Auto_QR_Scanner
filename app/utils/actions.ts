@@ -1,23 +1,33 @@
 import Campaign from '~/Models/Campaign';
 import { connectDB } from './db';
-import BusinessProfiles from '~/Models/BusinessProfiles';
+import Accounts from '~/Models/Accounts';
 
 export async function createProfile({
+	email,
+	password,
 	companyName,
 	companyEmail,
 	companyPhoneNumber,
 }: {
+	email: FormDataEntryValue | null;
+	password: FormDataEntryValue | null;
 	companyName: FormDataEntryValue | null;
 	companyEmail: FormDataEntryValue | null;
 	companyPhoneNumber: FormDataEntryValue | null;
 }) {
 	try {
 		connectDB();
-		const newProfile = new BusinessProfiles({
+		const newProfile = new Accounts({
+			email,
+			password,
 			companyName,
 			companyEmail,
 			companyPhoneNumber,
 		});
+
+		if (!companyName || !companyEmail || !companyPhoneNumber) {
+			throw new Error('Missing required fields');
+		}
 		const newBusiness = await newProfile.save();
 		console.log('New Business Saved:', newBusiness);
 		return newBusiness;
