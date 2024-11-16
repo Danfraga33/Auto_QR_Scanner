@@ -1,8 +1,13 @@
-import type { MetaFunction } from '@remix-run/node';
-import { Link } from '@remix-run/react';
-import { Form, useLoaderData } from '@remix-run/react';
-import { ActionFunction, LoaderFunction } from '@remix-run/node';
-import authenticator from '~/services/auth.server';
+import { type MetaFunction } from '@remix-run/node';
+import {
+	RedirectToSignIn,
+	SignInButton,
+	SignOutButton,
+	SignUpButton,
+	SignedIn,
+	SignedOut,
+	UserButton,
+} from '@clerk/remix';
 export const meta: MetaFunction = () => {
 	return [
 		{ title: 'QR Scanner' },
@@ -10,46 +15,32 @@ export const meta: MetaFunction = () => {
 	];
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
-	return await authenticator.isAuthenticated(request, {
-		failureRedirect: '/login',
-	});
-};
-
-export const action: ActionFunction = async ({ request }) => {
-	await authenticator.logout(request, { redirectTo: '/login' });
-};
-
 export default function Index() {
-	const data = useLoaderData();
-	console.log(data);
 	return (
 		<div className="flex justify-center h-screen items-center flex-col">
-			<Link to="/Dashboard" className="items-start">
-				Dashboard
-			</Link>
-			<div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
-				<h1>Welcome to a Remix Protected Dashboard</h1>
-				<p>
-					{data?.name} {data?.token}
-				</p>
+			<div>
+				<h1>Index Route</h1>
+				<SignedIn>
+					<p>You are signed in!</p>
+					<div>
+						<p>View your profile here</p>
+						<UserButton />
+					</div>
+					<div>
+						<SignOutButton />
+					</div>
+				</SignedIn>
+				<SignedOut>
+					<p>You are signed out</p>
+					<div>
+						<SignInButton forceRedirectUrl="/Dashboard" />
+					</div>
+
+					<div>
+						<SignUpButton forceRedirectUrl="/Dashboard" />
+					</div>
+				</SignedOut>
 			</div>
-			<Link to="/customerform" className="items-start">
-				Form
-			</Link>
-			<Link to="/campaignBuilder" className="items-start">
-				Campaign Builder
-			</Link>
-			{data ? (
-				<Form method="post">
-					<button>Log Out</button>
-				</Form>
-			) : (
-				<Link to="/login" className="items-start">
-					Sign in
-				</Link>
-			)}
-			{!data ? <Link to="signupForm">Sign in</Link> : null}
 		</div>
 	);
 }
