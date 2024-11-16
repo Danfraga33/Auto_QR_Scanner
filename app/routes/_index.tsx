@@ -1,6 +1,5 @@
 import { type MetaFunction } from '@remix-run/node';
 import {
-	RedirectToSignIn,
 	SignInButton,
 	SignOutButton,
 	SignUpButton,
@@ -8,6 +7,7 @@ import {
 	SignedOut,
 	UserButton,
 } from '@clerk/remix';
+import { Link } from '@remix-run/react';
 export const meta: MetaFunction = () => {
 	return [
 		{ title: 'QR Scanner' },
@@ -26,6 +26,7 @@ export default function Index() {
 						<p>View your profile here</p>
 						<UserButton />
 					</div>
+					<Link to="/Dashboard">Dashboard</Link>
 					<div>
 						<SignOutButton />
 					</div>
