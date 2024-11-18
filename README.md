@@ -30,9 +30,9 @@ Components
 
 #### User Journey
 
-- User logins in or if no account, user signs up - putting in details such as phone number, email, business name and more.
+- User logins in or if no account, user signs up - putting in details such as phone number, email, business name and more. (Clerk Auth + Webhook)
 - User is then redirected to dashboard
-- User gets a custom QR Code (later can select their own hook)
+- User gets a custom QR Code per campaign they make (later can select their own hook)
 - User creates campaign (selecting audience, method, dates, frequency)
 - User Presses "Activate Campaign" button to activate
 - User can delete campaign
@@ -62,6 +62,7 @@ Components
 #### To Do
 
 - Save data from Clerk to MongoDB with Webhooks
+- Create custom signup page on clerk to get additional information.
 - Move Create Customer Fn to actions module
 - Fix Connection Strings for seperate connections
 - Save campaign to DB
