@@ -61,6 +61,7 @@ Components
 
 #### To Do
 
+- Create new business profile form page
 - Save data from Clerk to MongoDB with Webhooks
 - Create custom signup page on clerk to get additional information.
 - Move Create Customer Fn to actions module
