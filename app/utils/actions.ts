@@ -40,7 +40,7 @@ export async function getCampaign() {
 	connectDB();
 	try {
 		const data = await Campaign.find();
-		console.log(data);
+		// console.log(data);
 		return data;
 	} catch (err) {
 		console.error('Failed to fetch all campaigns');

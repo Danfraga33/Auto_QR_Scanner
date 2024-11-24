@@ -27,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		campaignType,
 		name,
 	});
-	console.log(response);
+	// console.log(response);
 	redirect('/');
 	return response;
 }
@@ -62,11 +62,11 @@ const CampaignBuilder = () => {
 	const marketingCampaignDates: Date[] = [new Date()];
 	campaigns?.map((campaign) => {
 		const date = new Date(campaign.startDate);
-		console.log(date);
+		// console.log(date);
 		marketingCampaignDates.push(new Date());
 	});
 
-	console.log(marketingCampaignDates);
+	// console.log(marketingCampaignDates);
 
 	const updateCampaign = (
 		campaignName: string,
