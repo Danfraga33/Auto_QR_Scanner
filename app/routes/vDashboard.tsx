@@ -249,8 +249,13 @@ function UpcomingTasks() {
 
 function NavMain() {
   const items = [
-    { title: "Dashboard", icon: LayoutDashboard, isActive: true },
-    { title: "Campaigns", icon: Target },
+    {
+      title: "Dashboard",
+      icon: LayoutDashboard,
+      isActive: true,
+      href: "/dashboard",
+    },
+    { title: "Campaigns", icon: Target, href: "/campaigns" },
     { title: "Leads", icon: Users },
     { title: "Analytics", icon: BarChart3 },
   ];
@@ -263,7 +268,7 @@ function NavMain() {
             className={item.isActive ? "bg-gray-200/80" : ""}
             asChild
           >
-            <a href="#">
+            <a href={item.href}>
               <item.icon />
               <span>{item.title}</span>
             </a>
