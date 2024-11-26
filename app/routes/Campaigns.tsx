@@ -7,7 +7,6 @@ import {
   Edit,
   MoreHorizontal,
   Plus,
-  Search,
   Target,
   Trash,
 } from "lucide-react";
@@ -48,6 +47,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import SidebarComp from "~/components/Sidebar";
 
 // Extended sample data for campaigns
 const campaignsData = [
@@ -114,137 +114,141 @@ export default function CampaignsPage() {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 md:p-8">
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Campaigns</h1>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Create Campaign
-        </Button>
-      </div>
-      <Separator />
-      <div className="flex flex-col gap-4 md:flex-row md:items-center">
-        <Input
-          placeholder="Search campaigns..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="md:w-[300px]"
-        />
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="md:w-[180px]">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Status</SelectLabel>
-              <SelectItem value="All">All</SelectItem>
-              <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Scheduled">Scheduled</SelectItem>
-              <SelectItem value="Draft">Draft</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          title="Total Campaigns"
-          value={campaigns.length.toString()}
-          icon={Target}
-        />
-        <MetricCard
-          title="Active Campaigns"
-          value={campaigns
-            .filter((c) => c.status === "Active")
-            .length.toString()}
-          icon={BarChart}
-        />
-        <MetricCard
-          title="Total Leads"
-          value={campaigns.reduce((sum, c) => sum + c.leads, 0).toString()}
-          icon={Target}
-        />
-        <MetricCard
-          title="Total Conversions"
-          value={campaigns
-            .reduce((sum, c) => sum + c.conversions, 0)
-            .toString()}
-          icon={BarChart}
-        />
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Campaign List</CardTitle>
-          <CardDescription>Manage your marketing campaigns</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Start Date</TableHead>
-                <TableHead>End Date</TableHead>
-                <TableHead>Leads</TableHead>
-                <TableHead>Conversions</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredCampaigns.map((campaign) => (
-                <TableRow key={campaign.id}>
-                  <TableCell className="font-medium">{campaign.name}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        campaign.status === "Active" ? "default" : "secondary"
-                      }
-                    >
-                      {campaign.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{campaign.startDate}</TableCell>
-                  <TableCell>{campaign.endDate}</TableCell>
-                  <TableCell>{campaign.leads}</TableCell>
-                  <TableCell>{campaign.conversions}</TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Calendar className="mr-2 h-4 w-4" />
-                          View Schedule
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <BarChart className="mr-2 h-4 w-4" />
-                          View Analytics
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => handleDeleteCampaign(campaign.id)}
-                        >
-                          <Trash className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+    <SidebarComp>
+      <div className="flex flex-col gap-4 p-4 md:p-8">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <h1 className="text-3xl font-bold tracking-tight">Campaigns</h1>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            Create Campaign
+          </Button>
+        </div>
+        <Separator />
+        <div className="flex flex-col gap-4 md:flex-row md:items-center">
+          <Input
+            placeholder="Search campaigns..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="md:w-[300px]"
+          />
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="md:w-[180px]">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Status</SelectLabel>
+                <SelectItem value="All">All</SelectItem>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Scheduled">Scheduled</SelectItem>
+                <SelectItem value="Draft">Draft</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <MetricCard
+            title="Total Campaigns"
+            value={campaigns.length.toString()}
+            icon={Target}
+          />
+          <MetricCard
+            title="Active Campaigns"
+            value={campaigns
+              .filter((c) => c.status === "Active")
+              .length.toString()}
+            icon={BarChart}
+          />
+          <MetricCard
+            title="Total Leads"
+            value={campaigns.reduce((sum, c) => sum + c.leads, 0).toString()}
+            icon={Target}
+          />
+          <MetricCard
+            title="Total Conversions"
+            value={campaigns
+              .reduce((sum, c) => sum + c.conversions, 0)
+              .toString()}
+            icon={BarChart}
+          />
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Campaign List</CardTitle>
+            <CardDescription>Manage your marketing campaigns</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Start Date</TableHead>
+                  <TableHead>End Date</TableHead>
+                  <TableHead>Leads</TableHead>
+                  <TableHead>Conversions</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
+              </TableHeader>
+              <TableBody>
+                {filteredCampaigns.map((campaign) => (
+                  <TableRow key={campaign.id}>
+                    <TableCell className="font-medium">
+                      {campaign.name}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          campaign.status === "Active" ? "default" : "secondary"
+                        }
+                      >
+                        {campaign.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{campaign.startDate}</TableCell>
+                    <TableCell>{campaign.endDate}</TableCell>
+                    <TableCell>{campaign.leads}</TableCell>
+                    <TableCell>{campaign.conversions}</TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Calendar className="mr-2 h-4 w-4" />
+                            View Schedule
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <BarChart className="mr-2 h-4 w-4" />
+                            View Analytics
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteCampaign(campaign.id)}
+                          >
+                            <Trash className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+    </SidebarComp>
   );
 }
 
