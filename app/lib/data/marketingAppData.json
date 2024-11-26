@@ -1,0 +1,46 @@
+{
+  "user": {
+    "name": "Alice Johnson",
+    "email": "alice@example.com",
+    "avatar": "/avatars/alice.jpg"
+  },
+  "campaigns": [
+    {
+      "name": "Summer Sale",
+      "status": "Active",
+      "leads": 1250,
+      "conversions": 320
+    },
+    {
+      "name": "Product Launch",
+      "status": "Scheduled",
+      "leads": 800,
+      "conversions": 0
+    },
+    { "name": "Holiday Promo", "status": "Draft", "leads": 0, "conversions": 0 }
+  ],
+  "leadSources": [
+    { "name": "Website", "count": 2500 },
+    { "name": "Social Media", "count": 1800 },
+    { "name": "Email", "count": 1200 },
+    { "name": "Referrals", "count": 500 }
+  ],
+  "cronJobs": [
+    {
+      "name": "Daily Lead Nurturing",
+      "schedule": "0 9 * * *",
+      "status": "Active"
+    },
+    {
+      "name": "Weekly Newsletter",
+      "schedule": "0 10 * * 1",
+      "status": "Active"
+    },
+    { "name": "Monthly Report", "schedule": "0 9 1 * *", "status": "Active" },
+    {
+      "name": "Social Media Posts",
+      "schedule": "0 */4 * * *",
+      "status": "Paused"
+    }
+  ]
+}
