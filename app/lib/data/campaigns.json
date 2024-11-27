@@ -7,7 +7,8 @@
     "endDate": "2024-11-03T00:00:00.000Z",
     "frequency": "Single",
     "method": "SMS",
-    "status": "Active"
+    "status": "Active",
+    "conversions": 41
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "endDate": "2024-11-09T00:00:00.000Z",
     "frequency": "Single",
     "method": "SMS",
-    "status": "Scheduled"
+    "status": "Scheduled",
+    "conversions": 12
   },
   {
     "id": 3,
@@ -27,6 +29,7 @@
     "name": "Weekend Frenzy",
     "type": "brickNMortar",
     "method": "Email",
-    "status": "Draft"
+    "status": "Draft",
+    "conversions": 22
   }
 ]
