@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Dashboard",
+    "icon": "LayoutDashboard",
+    "href": "/vdashboard"
+  },
+  { "title": "Campaigns", "icon": "Target", "href": "/campaigns" },
+  { "title": "Leads", "icon": "Users" },
+  { "title": "Analytics", "icon": "BarChart3" }
+]
