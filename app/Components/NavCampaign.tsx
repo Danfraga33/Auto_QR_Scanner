@@ -8,14 +8,9 @@ import {
   SidebarMenuItem,
 } from "./ui/sidebar";
 import { Badge } from "./ui/badge";
+import campaigns from "~/lib/data/campaigns.json";
 
 export default function NavCampaigns() {
-  const campaigns = [
-    { name: "Summer Sale", status: "active" },
-    { name: "Product Launch", status: "scheduled" },
-    { name: "Holiday Promo", status: "draft" },
-  ];
-
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Campaigns</SidebarGroupLabel>
@@ -30,10 +25,14 @@ export default function NavCampaigns() {
                 </a>
               </SidebarMenuButton>
               <Badge
-                variant={campaign.status === "active" ? "default" : "secondary"}
+                variant={
+                  campaign.status.toLowerCase() === "active"
+                    ? "default"
+                    : "secondary"
+                }
                 className="ml-auto"
               >
-                {campaign.status}
+                {campaign.status.toLowerCase()}
               </Badge>
             </SidebarMenuItem>
           ))}
