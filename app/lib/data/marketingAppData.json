@@ -1,7 +1,8 @@
 {
   "user": {
     "name": "Alice Johnson",
-    "email": "alice@example.com"
+    "email": "alice@example.com",
+    "avatar": "/"
   },
   "campaigns": [
     {
