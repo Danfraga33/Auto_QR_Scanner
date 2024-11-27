@@ -1,4 +1,4 @@
-import React, { ComponentProps, ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 import {
   SidebarFooter,
   SidebarInset,
@@ -23,8 +23,6 @@ import { NavMain } from "./NavMain";
 import NavUser from "./NavUser";
 import CronJobsOverview from "./CronJobsOverview";
 import UpcomingTasks from "./UpcomingTasks";
-import NavAnalytics from "./NavAnalytics";
-import NavLeads from "./NavLeads";
 import { Separator } from "./ui/separator";
 import {
   Breadcrumb,
@@ -33,17 +31,19 @@ import {
   BreadcrumbPage,
 } from "./ui/breadcrumb";
 import { useLocation } from "@remix-run/react";
+import CompanyName from "./CompanyName";
 
 function SidebarLeft({ ...props }: ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
+        <CompanyName />
         <NavMain />
       </SidebarHeader>
       <SidebarContent>
         <NavCampaigns />
-        <NavLeads />
-        <NavAnalytics />
+        {/* <NavLeads /> */}
+        {/* <NavAnalytics /> */}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
@@ -80,9 +80,11 @@ function SidebarRight({ ...props }: ComponentProps<typeof Sidebar>) {
 }
 
 const SidebarComp = ({ children }: { children: ReactNode }) => {
-  const location = useLocation();
-  let route = location.pathname.trim().replace("/", "");
-  let path = route.charAt(0).toUpperCase() + route.slice(1);
+  const path = useLocation()
+    .pathname.trim()
+    .replace("/", "")
+    .replace(/^./, (char) => char.toUpperCase());
+
   return (
     <SidebarProvider>
       <SidebarLeft />
