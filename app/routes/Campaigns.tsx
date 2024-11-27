@@ -115,36 +115,34 @@ export default function CampaignsPage() {
 
   return (
     <SidebarComp>
-      <div className="flex flex-col gap-4 p-4 md:p-8">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <h1 className="text-3xl font-bold tracking-tight">Campaigns</h1>
+      <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+            <Input
+              placeholder="Search campaigns..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="md:w-[300px]"
+            />
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="md:w-[180px]">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Status</SelectLabel>
+                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="Active">Active</SelectItem>
+                  <SelectItem value="Scheduled">Scheduled</SelectItem>
+                  <SelectItem value="Draft">Draft</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Create Campaign
           </Button>
-        </div>
-        <Separator />
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
-          <Input
-            placeholder="Search campaigns..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="md:w-[300px]"
-          />
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="md:w-[180px]">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Status</SelectLabel>
-                <SelectItem value="All">All</SelectItem>
-                <SelectItem value="Active">Active</SelectItem>
-                <SelectItem value="Scheduled">Scheduled</SelectItem>
-                <SelectItem value="Draft">Draft</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <MetricCard
