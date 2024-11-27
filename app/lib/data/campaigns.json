@@ -1,47 +1,32 @@
 [
-	{
-		"id": 1,
-		"campaignName": "Free Coffee",
-		"type": "brickNMortar",
-		"startDate": "2024-11-01T00:00:00.000Z",
-		"endDate": "2024-11-03T00:00:00.000Z",
-		"frequency": "Single",
-		"method": "SMS"
-	},
-	{
-		"id": 2,
-		"campaignName": "Kids Eat Free",
-		"type": "brickNMortar",
-		"startDate": "2024-11-03T00:00:00.000Z",
-		"endDate": "2024-11-09T00:00:00.000Z",
-		"frequency": "Single",
-		"method": "SMS"
-	},
-	{
-		"id": 3,
-		"startDate": "2024-11-012T00:00:00.000Z",
-		"endDate": "2024-11-15T00:00:00.000Z",
-		"frequency": "Single",
-		"campaignName": "Weekend Frenzy",
-		"type": "brickNMortar",
-		"method": "Email"
-	},
-	{
-		"id": 4,
-		"startDate": "2024-11-17T00:00:00.000Z",
-		"endDate": "2024-11-20T00:00:00.000Z",
-		"frequency": "Single",
-		"campaignName": "10% Off Selected Products",
-		"type": "digitalMarketing",
-		"method": "Email"
-	},
-	{
-		"id": 5,
-		"campaignName": "Donut",
-		"type": "brickNMortar",
-		"startDate": "2024-11-25T00:00:00.000Z",
-		"endDate": "2024-11-30T00:00:00.000Z",
-		"frequency": "Single",
-		"method": "SMS"
-	}
+  {
+    "id": 1,
+    "name": "Free Coffee",
+    "type": "brickNMortar",
+    "startDate": "2024-11-01T00:00:00.000Z",
+    "endDate": "2024-11-03T00:00:00.000Z",
+    "frequency": "Single",
+    "method": "SMS",
+    "status": "Active"
+  },
+  {
+    "id": 2,
+    "name": "Kids Eat Free",
+    "type": "brickNMortar",
+    "startDate": "2024-11-03T00:00:00.000Z",
+    "endDate": "2024-11-09T00:00:00.000Z",
+    "frequency": "Single",
+    "method": "SMS",
+    "status": "Scheduled"
+  },
+  {
+    "id": 3,
+    "startDate": "2024-11-012T00:00:00.000Z",
+    "endDate": "2024-11-15T00:00:00.000Z",
+    "frequency": "Single",
+    "name": "Weekend Frenzy",
+    "type": "brickNMortar",
+    "method": "Email",
+    "status": "Draft"
+  }
 ]
