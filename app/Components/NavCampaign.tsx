@@ -1,4 +1,4 @@
-import { Plus, Target } from "lucide-react";
+import { Target } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -10,7 +10,6 @@ import {
 import { Badge } from "./ui/badge";
 import campaigns from "~/lib/data/campaigns.json";
 import { Link } from "@remix-run/react";
-import { Sheet } from "./ui/sheet";
 
 export default function NavCampaigns() {
   return (

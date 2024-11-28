@@ -13,7 +13,6 @@ export function NavMain() {
             className="hover:underline hover:transition-all"
             onClick={() => {
               setIsActive(item.title);
-              console.log(item.title);
             }}
             isActive={true}
             asChild
