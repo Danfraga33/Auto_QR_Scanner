@@ -1,7 +1,7 @@
 import { BarChart3, Gauge, Target, Users, type LucideIcon } from "lucide-react";
 import SidebarComp from "~/components/Sidebar";
 import marketingAppData from "../lib/data/marketingAppData.json";
-
+import campaignData from "~/lib/data/campaigns.json";
 import { Progress } from "~/components/ui/progress";
 
 export default function MarketingApp() {
@@ -15,7 +15,7 @@ export default function MarketingApp() {
           <MetricCard title="ROI" value="245%" icon={Gauge} />
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          <CampaignOverview campaigns={marketingAppData.campaigns} />
+          <CampaignOverview campaigns={campaignData} />
           <LeadSourcesChart leadSources={marketingAppData.leadSources} />
         </div>
       </div>

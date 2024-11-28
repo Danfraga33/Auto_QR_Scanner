@@ -1,10 +1,10 @@
 import React from "react";
-import { Calendar } from "./ui/calendar";
+import { CalendarComp } from "./ui/calendar";
 
 const SelectedCampaign = () => {
   return (
-    <div>
-      <Calendar />
+    <div className="flex justify-center items-center">
+      <CalendarComp />
     </div>
   );
 };
