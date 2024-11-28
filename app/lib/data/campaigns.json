@@ -5,10 +5,12 @@
     "type": "brickNMortar",
     "startDate": "2024-11-01T00:00:00.000Z",
     "endDate": "2024-11-03T00:00:00.000Z",
-    "frequency": "Single",
+    "frequency": "One-Time",
     "method": "SMS",
     "status": "Active",
-    "conversions": 41
+    "leads": 444,
+    "conversions": 41,
+    "emailsSent": "245"
   },
   {
     "id": 2,
@@ -16,20 +18,24 @@
     "type": "brickNMortar",
     "startDate": "2024-11-03T00:00:00.000Z",
     "endDate": "2024-11-09T00:00:00.000Z",
-    "frequency": "Single",
+    "frequency": "Monthly",
     "method": "SMS",
     "status": "Scheduled",
-    "conversions": 12
+    "leads": 21,
+    "conversions": 12,
+    "emailsSent": "520"
   },
   {
     "id": 3,
     "startDate": "2024-11-012T00:00:00.000Z",
     "endDate": "2024-11-15T00:00:00.000Z",
-    "frequency": "Single",
+    "frequency": "Weekly",
     "name": "Weekend Frenzy",
     "type": "brickNMortar",
     "method": "Email",
     "status": "Draft",
-    "conversions": 22
+    "leads": 98,
+    "conversions": 22,
+    "emailsSent": "191"
   }
 ]
