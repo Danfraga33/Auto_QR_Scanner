@@ -33,7 +33,7 @@ Components
 - User logins in or if no account, user signs up - putting in details such as phone number, email, business name and more. (Clerk Auth + Webhook)
 - User is then redirected to dashboard
 - User gets a custom QR Code per campaign they make (later can select their own hook)
-- User creates campaign (selecting audience, method, dates, frequency)
+- User creates campaign (selecting audience, method, dates, frequency) - ONLY NEWSLETTER (MVP)
 - User Presses "Activate Campaign" button to activate
 - User can delete campaign
 - User can edit campaign
