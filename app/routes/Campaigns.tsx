@@ -83,7 +83,6 @@ export default function CampaignsPage() {
   const [selectedCampaign, setSelectedCampaign] = useState<any>({});
   const [freqValue, setFreqValue] = useState("Weekly");
 
-  console.log(selectedCampaign);
   const filteredCampaigns = campaigns.filter(
     (campaign) =>
       campaign.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -93,6 +92,8 @@ export default function CampaignsPage() {
   const handleDeleteCampaign = (id: number) => {
     setCampaigns(campaigns.filter((campaign) => campaign.id !== id));
   };
+
+  console.log();
 
   return (
     <SidebarComp>
@@ -224,7 +225,7 @@ export default function CampaignsPage() {
                   <TableHead>Status</TableHead>
                   <TableHead>Start Date</TableHead>
                   <TableHead>End Date</TableHead>
-                  <TableHead>Leads</TableHead>
+
                   <TableHead>Conversions</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -261,7 +262,6 @@ export default function CampaignsPage() {
                           {campaign.startDate.split("T")[0]}
                         </TableCell>
                         <TableCell>{campaign.endDate.split("T")[0]}</TableCell>
-                        <TableCell>{campaign.leads}</TableCell>
                         <TableCell>{campaign.conversions}</TableCell>
                         <TableCell className="text-right">
                           <DropdownMenu>
@@ -305,124 +305,130 @@ export default function CampaignsPage() {
             </Table>
           </CardContent>
         </Card>
-        <Tabs defaultValue="performance" className="w-full">
-          <TabsList className="grid w-full grid-cols-1">
-            <TabsTrigger value="performance">Performance</TabsTrigger>
-          </TabsList>
+        {Object.keys(selectedCampaign).length > 0 ? (
+          <Tabs defaultValue="performance" className="w-full">
+            <TabsList className="grid w-full grid-cols-1">
+              <TabsTrigger value="performance">Performance</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="performance">
-            <Card>
-              <CardHeader>
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <CardTitle>Performance</CardTitle>
-                    <CardDescription>
-                      Campaign Performance Metrics
-                    </CardDescription>
-                  </div>
+            <TabsContent value="performance">
+              <Card>
+                <CardHeader>
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <CardTitle>
+                        {selectedCampaign.name ?? "Performance"}
+                      </CardTitle>
+                      <CardDescription>
+                        Campaign Performance Metrics
+                      </CardDescription>
+                    </div>
 
-                  <Dialog>
-                    <DialogTrigger
-                      onClick={() =>
-                        setSelected([
-                          new Date(selectedCampaign.startDate),
-                          new Date(selectedCampaign.endDate),
-                        ])
-                      }
-                      asChild
-                    >
-                      <Button>Edit Campaign</Button>
-                    </DialogTrigger>{" "}
-                    <DialogContent className="sm:max-w-[39rem]">
-                      <DialogHeader>
-                        <DialogTitle>{selectedCampaign.name}</DialogTitle>
-                      </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="name" className="text-right">
-                            Name
-                          </Label>
-                          <Input
-                            id="name"
-                            value={selectedCampaign.name}
-                            className="col-span-3"
-                            disabled
-                          />
-                          <Label htmlFor="status" className="text-right">
-                            Status
-                          </Label>
-                          <Input
-                            id="status"
-                            value={selectedCampaign.status}
-                            className="col-span-3"
-                            disabled
-                          />
-                          <Label htmlFor="template" className="text-right">
-                            Template
-                          </Label>
-                          <Input
-                            id="template"
-                            value="Template 1"
-                            className="col-span-3"
-                            disabled
-                          />
-                          <Label htmlFor="freq" className="text-right">
-                            Frequency
-                          </Label>
-                          <Input
-                            id="freq"
-                            value={selectedCampaign.frequency ?? "Weekly"}
-                            className="col-span-3"
-                            disabled
-                          />
+                    <Dialog>
+                      <DialogTrigger
+                        onClick={() =>
+                          setSelected([
+                            new Date(selectedCampaign.startDate),
+                            new Date(selectedCampaign.endDate),
+                          ])
+                        }
+                        asChild
+                      >
+                        <Button>Edit Campaign</Button>
+                      </DialogTrigger>{" "}
+                      <DialogContent className="sm:max-w-[39rem]">
+                        <DialogHeader>
+                          <DialogTitle>{selectedCampaign.name}</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="name" className="text-right">
+                              Name
+                            </Label>
+                            <Input
+                              id="name"
+                              value={selectedCampaign.name}
+                              className="col-span-3"
+                            />
+                            <Label htmlFor="status" className="text-right">
+                              Status
+                            </Label>
+                            <Input
+                              id="status"
+                              value={selectedCampaign.status}
+                              className="col-span-3"
+                            />
+                            <Label htmlFor="template" className="text-right">
+                              Template
+                            </Label>
+                            <Input
+                              id="template"
+                              value="Template 1"
+                              className="col-span-3"
+                            />
+                            <Label htmlFor="freq" className="text-right">
+                              Frequency
+                            </Label>
+                            <Input
+                              id="freq"
+                              value={selectedCampaign.frequency ?? "Weekly"}
+                              className="col-span-3"
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <CalendarComp
-                        className="flex justify-center w-full"
-                        selected={selected}
-                      />
-
-                      <DialogFooter>
-                        <Button type="submit">Save changes</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              </CardHeader>
-
-              <div className="flex flex-col px-3 gap-2 py-3">
-                <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 ">
-                  <MetricCard title="Emails/SMS Sent" value="221" icon={Mail} />
-                  <MetricCard
-                    title="Delivery Rate"
-                    value="98%"
-                    icon={CheckCheck}
-                  />
-                  <MetricCard title="CTR" value="82%" icon={Mouse} />
-                </div>
-                <div className="">
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold">Conversion Rate</h3>
-                    <div className="mt-4 space-y-4">
-                      <div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span>0%</span>
-                          <span className="font-medium">100%</span>
-                        </div>
-                        <Progress
-                          // value={
-                          //   campaign.conversions / campaign.emailsSent ?? 32
-                          // }
-                          className="mt-1"
+                        <CalendarComp
+                          className="flex justify-center w-full"
+                          selected={selected}
                         />
+
+                        <DialogFooter>
+                          <Button type="submit">Save changes</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </CardHeader>
+
+                <div className="flex flex-col px-3 gap-2 py-3">
+                  <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 ">
+                    <MetricCard
+                      title="Emails/SMS Sent"
+                      value="221"
+                      icon={Mail}
+                    />
+                    <MetricCard
+                      title="Delivery Rate"
+                      value="98%"
+                      icon={CheckCheck}
+                    />
+                    <MetricCard title="CTR" value="82%" icon={Mouse} />
+                  </div>
+                  <div className="">
+                    <div className="p-6">
+                      <h3 className="text-lg font-semibold">Conversion Rate</h3>
+                      <div className="mt-4 space-y-4">
+                        <div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span>0%</span>
+                            <span className="font-medium">100%</span>
+                          </div>
+                          <Progress
+                            value={
+                              (selectedCampaign.conversions /
+                                selectedCampaign.emailsSent) *
+                                100 ?? 32
+                            }
+                            className="mt-1"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Card>
-          </TabsContent>
-        </Tabs>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        ) : null}
       </div>
     </SidebarComp>
   );
