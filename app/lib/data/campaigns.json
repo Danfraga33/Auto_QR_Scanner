@@ -22,7 +22,7 @@
     "method": "SMS",
     "status": "Scheduled",
     "leads": 21,
-    "conversions": 12,
+    "conversions": 120,
     "emailsSent": "520"
   },
   {
@@ -35,7 +35,7 @@
     "method": "Email",
     "status": "Draft",
     "leads": 98,
-    "conversions": 22,
+    "conversions": 78,
     "emailsSent": "191"
   }
 ]
