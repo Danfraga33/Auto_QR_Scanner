@@ -9,6 +9,8 @@ import {
 } from "./ui/sidebar";
 import { Badge } from "./ui/badge";
 import campaigns from "~/lib/data/campaigns.json";
+import { Link } from "@remix-run/react";
+import { Sheet } from "./ui/sheet";
 
 export default function NavCampaigns() {
   return (
@@ -19,10 +21,10 @@ export default function NavCampaigns() {
           {campaigns.map((campaign) => (
             <SidebarMenuItem key={campaign.name}>
               <SidebarMenuButton asChild>
-                <a href="#">
+                <Link to="/campaigns">
                   <Target className="h-4 w-4" />
                   <span>{campaign.name}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
               <Badge
                 variant={
@@ -36,12 +38,7 @@ export default function NavCampaigns() {
               </Badge>
             </SidebarMenuItem>
           ))}
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Plus className="h-4 w-4" />
-              <span>New Campaign</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <SidebarMenuItem></SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
