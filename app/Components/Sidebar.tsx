@@ -1,28 +1,18 @@
 import { ComponentProps, ReactNode } from "react";
 import {
-  SidebarFooter,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
-  SidebarSeparator,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
-import marketingAppData from "../lib/data/marketingAppData.json";
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarRail,
 } from "~/components/ui/sidebar";
-import { Plus } from "lucide-react";
 
 import NavCampaigns from "./NavCampaign";
 import { NavMain } from "./NavMain";
-import NavUser from "./NavUser";
-import CronJobsOverview from "./CronJobsOverview";
-import UpcomingTasks from "./UpcomingTasks";
 import { Separator } from "./ui/separator";
 import {
   Breadcrumb,
@@ -32,6 +22,8 @@ import {
 } from "./ui/breadcrumb";
 import { useLocation } from "@remix-run/react";
 import CompanyName from "./CompanyName";
+import NavUser from "./NavUser";
+import marketingAppData from "../lib/data/marketingAppData.json";
 
 function SidebarLeft({ ...props }: ComponentProps<typeof Sidebar>) {
   return (
@@ -45,36 +37,8 @@ function SidebarLeft({ ...props }: ComponentProps<typeof Sidebar>) {
         {/* <NavLeads /> */}
         {/* <NavAnalytics /> */}
       </SidebarContent>
+      <NavUser user={marketingAppData.user} />
       <SidebarRail />
-    </Sidebar>
-  );
-}
-
-function SidebarRight({ ...props }: ComponentProps<typeof Sidebar>) {
-  return (
-    <Sidebar
-      collapsible="none"
-      className="sticky hidden lg:flex top-0 h-svh border-l"
-      {...props}
-    >
-      <SidebarHeader className="h-16 border-b border-sidebar-border">
-        <NavUser user={marketingAppData.user} />
-      </SidebarHeader>
-      <SidebarContent>
-        <CronJobsOverview cronJobs={marketingAppData.cronJobs} />
-        <SidebarSeparator className="mx-0" />
-        <UpcomingTasks />
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Plus />
-              <span>New CRON Job</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }
@@ -106,7 +70,6 @@ const SidebarComp = ({ children }: { children: ReactNode }) => {
         </header>
         {children}
       </SidebarInset>
-      <SidebarRight />
     </SidebarProvider>
   );
 };
