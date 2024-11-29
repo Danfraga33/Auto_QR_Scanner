@@ -40,6 +40,17 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -74,7 +85,31 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { Separator } from "~/components/ui/separator";
+import { createCampaign } from "~/utils/actions";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { Form } from "@remix-run/react";
 
+export async function action({ request }: ActionFunctionArgs) {
+  const body = await request.formData();
+  const name = body.get("name") as string;
+  const campaignType = body.get("campaignType") as string;
+  const startDate = body.get("startDate") as string;
+  const endDate = body.get("endDate") as string;
+  const method = body.get("method") as string;
+  const response = createCampaign({
+    method,
+    startDate,
+    endDate,
+    campaignType,
+    name,
+  });
+  // console.log(response);
+  redirect("/");
+  return response;
+}
+function NamedDropdownMenuContent({ name, children, onClick }) {
+  return <DropdownMenuContent name={name}>{children}</DropdownMenuContent>;
+}
 export default function CampaignsPage() {
   const [selected, setSelected] = useState<Date[]>([]);
   const [campaigns, setCampaigns] = useState(campaignsData);
@@ -136,12 +171,14 @@ export default function CampaignsPage() {
                   your account and remove your data from our servers.
                 </SheetDescription>
                 <Separator className="my-4" />
-                <div className="flex items-center gap-3">
-                  <Label htmlFor="name" className="text-md">
-                    Name:
-                  </Label>
-                  <Input value="Birthday Special" id="name" />
-                </div>
+                <Form method="post">
+                  <div className="flex items-center gap-3">
+                    <Label htmlFor="name" className="text-md">
+                      Name:
+                    </Label>
+                    <Input value="Birthday Special" name="name" id="name" />
+                  </div>
+                </Form>
                 <div className="flex items-center gap-3">
                   <Label htmlFor="freq" className="text-md">
                     Frequency:
@@ -152,10 +189,10 @@ export default function CampaignsPage() {
                         {freqValue}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel onClick={() => setFreqValue("Daily")}>
+                    <NamedDropdownMenuContent name="freq">
+                      <DropdownMenuItem onClick={() => setFreqValue("Daily")}>
                         Daily
-                      </DropdownMenuLabel>
+                      </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => setFreqValue("Weekly")}>
                         Weekly
@@ -164,7 +201,7 @@ export default function CampaignsPage() {
                       <DropdownMenuItem onClick={() => setFreqValue("Monthly")}>
                         Monthly
                       </DropdownMenuItem>
-                    </DropdownMenuContent>
+                    </NamedDropdownMenuContent>
                   </DropdownMenu>
                 </div>
                 <Separator />
@@ -382,7 +419,37 @@ export default function CampaignsPage() {
                         />
 
                         <DialogFooter>
-                          <Button type="submit">Save changes</Button>
+                          <AlertDialog>
+                            <Button
+                              variant="secondary"
+                              className="text-gray-400"
+                              asChild
+                            >
+                              <AlertDialogTrigger>Delete</AlertDialogTrigger>
+                            </Button>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently delete the campaign.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <Button variant="destructive" asChild>
+                                  <AlertDialogAction>
+                                    Continue
+                                  </AlertDialogAction>
+                                </Button>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                          <Button type="submit" variant="default">
+                            Save changes
+                          </Button>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
