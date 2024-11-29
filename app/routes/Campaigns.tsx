@@ -68,7 +68,7 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { Label } from "~/components/ui/label";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import campaignsData from "~/lib/data/campaigns.json";
 import { CalendarComp } from "~/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
@@ -88,6 +88,7 @@ import { Separator } from "~/components/ui/separator";
 import { createCampaign } from "~/utils/actions";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
+import { setHours, setMinutes } from "date-fns";
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
@@ -107,16 +108,30 @@ export async function action({ request }: ActionFunctionArgs) {
   redirect("/");
   return response;
 }
-function NamedDropdownMenuContent({ name, children, onClick }) {
+function NamedDropdownMenuContent({ name, children }) {
   return <DropdownMenuContent name={name}>{children}</DropdownMenuContent>;
 }
 export default function CampaignsPage() {
-  const [selected, setSelected] = useState<Date[]>([]);
+  const [selected, setSelected] = useState<Date>();
+  const [campaignDateRange, setCampaignDateRange] = useState<Date[]>([]);
   const [campaigns, setCampaigns] = useState(campaignsData);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [selectedCampaign, setSelectedCampaign] = useState<any>({});
   const [freqValue, setFreqValue] = useState("Weekly");
+  const [timeValue, setTimeValue] = useState<string>("00:00");
+
+  const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const time = e.target.value;
+    if (!selected) {
+      setTimeValue(time);
+      return;
+    }
+    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
+    const newSelectedDate = setHours(setMinutes(selected, minutes), hours);
+    setSelected(newSelectedDate);
+    setTimeValue(time);
+  };
 
   const filteredCampaigns = campaigns.filter(
     (campaign) =>
@@ -158,7 +173,7 @@ export default function CampaignsPage() {
           </div>
           <Sheet>
             <Button asChild>
-              <SheetTrigger>
+              <SheetTrigger onClick={() => setSelected()}>
                 <Plus className="mr-2 h-4 w-4" />
                 Create Campaign
               </SheetTrigger>
@@ -206,8 +221,22 @@ export default function CampaignsPage() {
                 </div>
                 <Separator />
                 <Label className="text-sm">Pick Start and End Date:</Label>
+                <Input
+                  type="time"
+                  value={timeValue}
+                  onChange={handleTimeChange}
+                />
                 <div className="flex justify-center  items-center gap-3">
-                  <CalendarComp selected={new Date()} />
+                  <CalendarComp
+                    selected={selected}
+                    onSelect={setSelected}
+                    mode="single"
+                    footer={
+                      selected
+                        ? `Selected: ${selected.toLocaleDateString()}`
+                        : "Pick a day."
+                    }
+                  />
                 </div>
               </SheetHeader>
               <SheetFooter>
@@ -272,7 +301,7 @@ export default function CampaignsPage() {
                   <Dialog>
                     <DialogTrigger
                       onClick={() => {
-                        setSelected([
+                        setCampaignDateRange([
                           new Date(campaign.startDate),
                           new Date(campaign.endDate),
                         ]);
@@ -362,17 +391,9 @@ export default function CampaignsPage() {
                     </div>
 
                     <Dialog>
-                      <DialogTrigger
-                        onClick={() =>
-                          setSelected([
-                            new Date(selectedCampaign.startDate),
-                            new Date(selectedCampaign.endDate),
-                          ])
-                        }
-                        asChild
-                      >
+                      <DialogTrigger asChild>
                         <Button>Edit Campaign</Button>
-                      </DialogTrigger>{" "}
+                      </DialogTrigger>
                       <DialogContent className="sm:max-w-[39rem]">
                         <DialogHeader>
                           <DialogTitle>{selectedCampaign.name}</DialogTitle>
@@ -415,7 +436,7 @@ export default function CampaignsPage() {
                         </div>
                         <CalendarComp
                           className="flex justify-center w-full"
-                          selected={selected}
+                          selected={campaignDateRange}
                         />
 
                         <DialogFooter>
