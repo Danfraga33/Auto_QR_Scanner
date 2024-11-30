@@ -86,9 +86,30 @@ import {
 } from "~/components/ui/sheet";
 import { Separator } from "~/components/ui/separator";
 import { createCampaign } from "~/utils/actions";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
-import { Form } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunction, redirect } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import { setHours, setMinutes } from "date-fns";
+import { useAuth } from "@clerk/remix";
+import { getAuth } from "@clerk/remix/ssr.server";
+import { createClerkClient } from "@clerk/remix/api.server";
+
+export const loader: LoaderFunction = async (args) => {
+  // Use getAuth() to retrieve the user's ID
+  const { userId } = await getAuth(args);
+
+  // If there is no userId, then redirect to sign-in route
+  if (!userId) {
+    return redirect("/sign-in?redirect_url=" + args.request.url);
+  }
+
+  // Initialize clerkClient and perform an operation
+  const user = await createClerkClient({
+    secretKey: process.env.CLERK_SECRET_KEY,
+  }).users.getUser(userId);
+
+  // Return the retrieved user data
+  return { serialisedUser: JSON.stringify(user) };
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
@@ -119,6 +140,9 @@ export default function CampaignsPage() {
   const [selectedCampaign, setSelectedCampaign] = useState<any>({});
   const [freqValue, setFreqValue] = useState("Weekly");
   const [timeValue, setTimeValue] = useState<string>("00:00");
+
+  const data = useLoaderData<typeof loader>();
+  console.log(data);
 
   const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const time = e.target.value;
