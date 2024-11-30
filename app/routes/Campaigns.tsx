@@ -89,7 +89,6 @@ import { createCampaign } from "~/utils/actions";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { setHours, setMinutes } from "date-fns";
-import { cn } from "~/lib/utils";
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
@@ -105,6 +104,7 @@ export async function action({ request }: ActionFunctionArgs) {
     endDate,
     campaignType,
     name,
+    freq,
   });
   redirect("/");
   return response;
