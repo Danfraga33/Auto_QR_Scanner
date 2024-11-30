@@ -89,6 +89,7 @@ import { createCampaign } from "~/utils/actions";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { setHours, setMinutes } from "date-fns";
+import { cn } from "~/lib/utils";
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
@@ -97,6 +98,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const startDate = body.get("startDate") as string;
   const endDate = body.get("endDate") as string;
   const method = body.get("method") as string;
+  const freq = body.get("freq") as string;
   const response = createCampaign({
     method,
     startDate,
@@ -104,13 +106,10 @@ export async function action({ request }: ActionFunctionArgs) {
     campaignType,
     name,
   });
-  // console.log(response);
   redirect("/");
   return response;
 }
-function NamedDropdownMenuContent({ name, children }) {
-  return <DropdownMenuContent name={name}>{children}</DropdownMenuContent>;
-}
+
 export default function CampaignsPage() {
   const [selected, setSelected] = useState<Date>();
   const [campaignDateRange, setCampaignDateRange] = useState<Date[]>([]);
@@ -173,86 +172,93 @@ export default function CampaignsPage() {
           </div>
           <Sheet>
             <Button asChild>
-              <SheetTrigger onClick={() => setSelected()}>
+              <SheetTrigger onClick={() => setSelected(undefined)}>
                 <Plus className="mr-2 h-4 w-4" />
                 Create Campaign
               </SheetTrigger>
             </Button>
             <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Create new campaign</SheetTitle>
-                <SheetDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </SheetDescription>
-                <Separator className="my-4" />
-                <Form method="post">
+              {" "}
+              <Form method="post">
+                <SheetHeader>
+                  <SheetTitle>Create new campaign</SheetTitle>
+                  <SheetDescription>
+                    Insert the required inputs to create a new campaign
+                  </SheetDescription>
+                  <Separator className="my-4" />
+
                   <div className="flex items-center gap-3">
                     <Label htmlFor="name" className="text-md">
                       Name:
                     </Label>
                     <Input value="Birthday Special" name="name" id="name" />
                   </div>
-                </Form>
-                <div className="flex items-center gap-3">
-                  <Label htmlFor="freq" className="text-md">
-                    Frequency:
-                  </Label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="default" value={freqValue}>
-                        {freqValue}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <NamedDropdownMenuContent name="freq">
-                      <DropdownMenuItem onClick={() => setFreqValue("Daily")}>
-                        Daily
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => setFreqValue("Weekly")}>
-                        Weekly
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => setFreqValue("Monthly")}>
-                        Monthly
-                      </DropdownMenuItem>
-                    </NamedDropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-                <Separator />
-                <Label className="text-sm">Pick Start and End Date:</Label>
-                <Input
-                  type="time"
-                  value={timeValue}
-                  onChange={handleTimeChange}
-                />
-                <div className="flex justify-center  items-center gap-3">
-                  <CalendarComp
-                    selected={selected}
-                    onSelect={setSelected}
-                    mode="single"
-                    footer={
-                      selected
-                        ? `Selected: ${selected.toLocaleDateString()}`
-                        : "Pick a day."
-                    }
+
+                  <div className="flex items-center gap-3">
+                    <Label htmlFor="freq" className="text-md">
+                      Frequency:
+                    </Label>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="default" value={freqValue}>
+                          {freqValue}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => setFreqValue("Daily")}>
+                          Daily
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => setFreqValue("Weekly")}
+                        >
+                          Weekly
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => setFreqValue("Monthly")}
+                        >
+                          Monthly
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <input type="text" hidden value={freqValue} name="freq" />
+                  </div>
+                  <Separator />
+                  <Label className="text-sm">Pick Start and End Date:</Label>
+                  <Input
+                    type="time"
+                    value={timeValue}
+                    onChange={handleTimeChange}
                   />
-                </div>
-              </SheetHeader>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">
-                    <span>
-                      <Check />
-                    </span>
-                    Save campaign
-                  </Button>
-                </SheetClose>
-              </SheetFooter>
+                  <div className="flex justify-center  items-center gap-3">
+                    <CalendarComp
+                      selected={selected}
+                      onSelect={setSelected}
+                      mode="single"
+                      footer={
+                        selected
+                          ? `Selected: ${selected.toLocaleDateString()}`
+                          : "Pick a day."
+                      }
+                    />
+                  </div>
+                </SheetHeader>
+                <SheetFooter>
+                  <SheetClose asChild>
+                    <Button type="submit">
+                      <span>
+                        <Check />
+                      </span>
+                      Save campaign
+                    </Button>
+                  </SheetClose>
+                </SheetFooter>
+              </Form>
             </SheetContent>
           </Sheet>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <MetricCard
             title="Total Campaigns"
             value={campaigns.length.toString()}
@@ -265,11 +271,11 @@ export default function CampaignsPage() {
               .length.toString()}
             icon={BarChartIcon}
           />
-          <MetricCard
+          {/* <MetricCard
             title="Total Leads"
             value={campaigns.reduce((sum, c) => sum + c.leads, 0).toString()}
             icon={Target}
-          />
+          /> */}
           <MetricCard
             title="Total Conversions"
             value={campaigns
@@ -504,7 +510,7 @@ export default function CampaignsPage() {
                             value={
                               (selectedCampaign.conversions /
                                 selectedCampaign.emailsSent) *
-                                100 ?? 32
+                              100
                             }
                             className="mt-1"
                           />

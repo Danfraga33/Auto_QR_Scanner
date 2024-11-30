@@ -8,15 +8,15 @@ export default function MarketingApp() {
   return (
     <SidebarComp>
       <div className="flex flex-1 flex-col gap-4 p-4">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <MetricCard title="Total Leads" value="5,280" icon={Users} />
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {/* <MetricCard title="Total Leads" value="5,280" icon={Users} /> */}
           <MetricCard title="Conversion Rate" value="18.5%" icon={BarChart3} />
           <MetricCard title="Active Campaigns" value="3" icon={Target} />
           <MetricCard title="ROI" value="245%" icon={Gauge} />
         </div>
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-1">
           <CampaignOverview campaigns={campaignData} />
-          <LeadSourcesChart leadSources={marketingAppData.leadSources} />
+          {/* <LeadSourcesChart leadSources={marketingAppData.leadSources} /> */}
         </div>
       </div>
     </SidebarComp>
@@ -77,35 +77,6 @@ function CampaignOverview({
                   {campaign.conversions} Conversions
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function LeadSourcesChart({
-  leadSources,
-}: {
-  leadSources: { name: string; count: number }[];
-}) {
-  const total = leadSources.reduce((sum, source) => sum + source.count, 0);
-
-  return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-      <div className="p-6">
-        <h3 className="text-lg font-semibold">Lead Sources</h3>
-        <div className="mt-4 space-y-4">
-          {leadSources.map((source) => (
-            <div key={source.name}>
-              <div className="flex items-center justify-between text-sm">
-                <span>{source.name}</span>
-                <span className="font-medium">
-                  {((source.count / total) * 100).toFixed(1)}%
-                </span>
-              </div>
-              <Progress value={(source.count / total) * 100} className="mt-1" />
             </div>
           ))}
         </div>
