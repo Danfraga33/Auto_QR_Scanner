@@ -19,12 +19,7 @@
     },
     { "name": "Holiday Promo", "status": "Draft", "leads": 0, "conversions": 0 }
   ],
-  "leadSources": [
-    { "name": "Website", "count": 2500 },
-    { "name": "Social Media", "count": 1800 },
-    { "name": "Email", "count": 1200 },
-    { "name": "Referrals", "count": 500 }
-  ],
+
   "cronJobs": [
     {
       "name": "Daily Lead Nurturing",
