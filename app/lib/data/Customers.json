@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "campaign": "Weekend Frenzy"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "janesmith@example.com",
+    "campaign": "Kids Eat Free"
+  },
+  {
+    "id": 3,
+    "name": "Michael Brown",
+    "email": "michaelbrown@example.com",
+    "campaign": "Free Coffee"
+  },
+  {
+    "id": 4,
+    "name": "Emily Davis",
+    "email": "emilydavis@example.com",
+    "campaign": "Weekend Frenzy"
+  },
+  {
+    "id": 5,
+    "name": "David Wilson",
+    "email": "davidwilson@example.com",
+    "campaign": "Kids Eat Free"
+  },
+  {
+    "id": 6,
+    "name": "Sarah Johnson",
+    "email": "sarahjohnson@example.com",
+    "campaign": "Free Coffee"
+  },
+  {
+    "id": 7,
+    "name": "Chris Martinez",
+    "email": "chrismartinez@example.com",
+    "campaign": "Kids Eat Free"
+  },
+  {
+    "id": 8,
+    "name": "Laura Hernandez",
+    "email": "laurahernandez@example.com",
+    "campaign": "Weekend Frenzy"
+  },
+  {
+    "id": 9,
+    "name": "Daniel Lee",
+    "email": "daniellee@example.com",
+    "campaign": "Free Coffee"
+  },
+  {
+    "id": 10,
+    "name": "Jessica Walker",
+    "email": "jessicawalker@example.com",
+    "campaign": "Kids Eat Free"
+  },
+  {
+    "id": 11,
+    "name": "Mark Hall",
+    "email": "markhall@example.com",
+    "campaign": "Weekend Frenzy"
+  },
+  {
+    "id": 12,
+    "name": "Anna Allen",
+    "email": "annaallen@example.com",
+    "campaign": "Free Coffee"
+  },
+  {
+    "id": 13,
+    "name": "Steven King",
+    "email": "stevenking@example.com",
+    "campaign": "Kids Eat Free"
+  },
+  {
+    "id": 14,
+    "name": "Olivia Scott",
+    "email": "oliviascott@example.com",
+    "campaign": "Weekend Frenzy"
+  },
+  {
+    "id": 15,
+    "name": "Brian Adams",
+    "email": "brianadams@example.com",
+    "campaign": "Free Coffee"
+  },
+  {
+    "id": 16,
+    "name": "Sophia Perez",
+    "email": "sophiaperez@example.com",
+    "campaign": "Kids Eat Free"
+  },
+  {
+    "id": 17,
+    "name": "Kevin White",
+    "email": "kevinwhite@example.com",
+    "campaign": "Weekend Frenzy"
+  },
+  {
+    "id": 18,
+    "name": "Megan Clark",
+    "email": "meganclark@example.com",
+    "campaign": "Free Coffee"
+  },
+  {
+    "id": 19,
+    "name": "Joshua Young",
+    "email": "joshuayoung@example.com",
+    "campaign": "Kids Eat Free"
+  },
+  {
+    "id": 20,
+    "name": "Emma Green",
+    "email": "emmagreen@example.com",
+    "campaign": "Weekend Frenzy"
+  }
+]
