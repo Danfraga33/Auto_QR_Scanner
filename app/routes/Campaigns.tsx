@@ -114,21 +114,27 @@ export const loader: LoaderFunction = async (args) => {
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
   const name = body.get("name") as string;
-  const campaignType = body.get("campaignType") as string;
   const startDate = body.get("startDate") as string;
-  const endDate = body.get("endDate") as string;
-  const method = body.get("method") as string;
+  const startTime = body.get("startTime") as string;
+  const strategy = body.get("strategy") as string;
   const freq = body.get("freq") as string;
-  const response = createCampaign({
-    method,
-    startDate,
-    endDate,
-    campaignType,
+
+  console.log({
     name,
+    strategy,
+    startDate,
+    startTime,
     freq,
   });
-  redirect("/");
-  return response;
+  // const response = createCampaign({
+  //   name,
+  //   method,
+  //   startDate,
+  //   startTime,
+  //   freq,
+  // });
+  // redirect("/");
+  return null;
 }
 
 export default function CampaignsPage() {
@@ -138,7 +144,9 @@ export default function CampaignsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [selectedCampaign, setSelectedCampaign] = useState<any>({});
+  const [campaignName, setCampaignName] = useState("untitled");
   const [freqValue, setFreqValue] = useState("Weekly");
+
   const [timeValue, setTimeValue] = useState<string>("00:00");
 
   const data = useLoaderData<typeof loader>();
@@ -165,8 +173,6 @@ export default function CampaignsPage() {
   const handleDeleteCampaign = (id: number) => {
     setCampaigns(campaigns.filter((campaign) => campaign.id !== id));
   };
-
-  console.log();
 
   return (
     <SidebarComp>
@@ -215,7 +221,16 @@ export default function CampaignsPage() {
                     <Label htmlFor="name" className="text-md">
                       Name:
                     </Label>
-                    <Input value="Birthday Special" name="name" id="name" />
+                    <Input placeholder="untitled" name="name" id="name" />
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <label htmlFor="strategy">Strategy</label>
+                    <input
+                      id="strategy"
+                      type="text"
+                      name="strategy"
+                      className="border border-1 px-2"
+                    />
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -254,6 +269,13 @@ export default function CampaignsPage() {
                     type="time"
                     value={timeValue}
                     onChange={handleTimeChange}
+                    name="startTime"
+                  />
+                  <input
+                    type="text"
+                    value={selected?.toISOString()}
+                    hidden
+                    name="startDate"
                   />
                   <div className="flex justify-center  items-center gap-3">
                     <CalendarComp
