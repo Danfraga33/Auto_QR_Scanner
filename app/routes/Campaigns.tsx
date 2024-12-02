@@ -126,15 +126,15 @@ export async function action({ request }: ActionFunctionArgs) {
     startTime,
     freq,
   });
-  // const response = createCampaign({
-  //   name,
-  //   method,
-  //   startDate,
-  //   startTime,
-  //   freq,
-  // });
-  // redirect("/");
-  return null;
+  const response = createCampaign({
+    name,
+    strategy,
+    startDate,
+    startTime,
+    freq,
+  });
+  redirect("/");
+  return response;
 }
 
 export default function CampaignsPage() {
@@ -151,6 +151,9 @@ export default function CampaignsPage() {
 
   const data = useLoaderData<typeof loader>();
   console.log(data);
+
+  console.log(campaignsData);
+  console.log(selected?.toISOString());
 
   const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const time = e.target.value;
@@ -208,7 +211,6 @@ export default function CampaignsPage() {
               </SheetTrigger>
             </Button>
             <SheetContent>
-              {" "}
               <Form method="post">
                 <SheetHeader>
                   <SheetTitle>Create new campaign</SheetTitle>
@@ -216,12 +218,16 @@ export default function CampaignsPage() {
                     Insert the required inputs to create a new campaign
                   </SheetDescription>
                   <Separator className="my-4" />
-
                   <div className="flex items-center gap-3">
                     <Label htmlFor="name" className="text-md">
                       Name:
                     </Label>
-                    <Input placeholder="untitled" name="name" id="name" />
+                    <Input
+                      placeholder="untitled"
+                      name="name"
+                      defaultValue="untitled"
+                      id="name"
+                    />
                   </div>
                   <div className="flex items-center gap-3">
                     <label htmlFor="strategy">Strategy</label>
@@ -229,10 +235,9 @@ export default function CampaignsPage() {
                       id="strategy"
                       type="text"
                       name="strategy"
-                      className="border border-1 px-2"
+                      className="border border-1 px-4 py-1 rounded-lg "
                     />
                   </div>
-
                   <div className="flex items-center gap-3">
                     <Label htmlFor="freq" className="text-md">
                       Frequency:
@@ -271,12 +276,6 @@ export default function CampaignsPage() {
                     onChange={handleTimeChange}
                     name="startTime"
                   />
-                  <input
-                    type="text"
-                    value={selected?.toISOString()}
-                    hidden
-                    name="startDate"
-                  />
                   <div className="flex justify-center  items-center gap-3">
                     <CalendarComp
                       selected={selected}
@@ -289,6 +288,12 @@ export default function CampaignsPage() {
                       }
                     />
                   </div>
+                  <input
+                    type="text"
+                    value={selected?.toISOString()}
+                    hidden
+                    name="startDate"
+                  />
                 </SheetHeader>
                 <SheetFooter>
                   <SheetClose asChild>
