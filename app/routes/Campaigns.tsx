@@ -93,7 +93,14 @@ import {
   redirect,
 } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import { setHours, setMinutes, addWeeks } from "date-fns";
+import {
+  setHours,
+  setMinutes,
+  addWeeks,
+  parseISO,
+  isAfter,
+  isBefore,
+} from "date-fns";
 import { useAuth } from "@clerk/remix";
 import { getAuth } from "@clerk/remix/ssr.server";
 import { createClerkClient } from "@clerk/remix/api.server";
@@ -113,27 +120,50 @@ export async function action({ request }: ActionFunctionArgs) {
   const freq = body.get("freq") as string;
   const startDate = body.get("startDate") as string;
   const startTime = body.get("startTime") as string;
-  let endDate;
-  switch (freq) {
-    case "Weekly":
-      endDate = addWeekToDate(startingDate);
-      break;
-    default:
-      console.log("No frequency specified or unsupported frequency.");
-      break;
+  const endDate = new Date("2024-12-20T14:00:00");
+  // let endDate;
+  // switch (freq) {
+  //   case "Weekly":
+  //     endDate = addWeekToDate(startingDate);
+  //     break;
+  //   default:
+  //     console.log("No frequency specified or unsupported frequency.");
+  //     break;
+  // }
+  function checkStatus(startDate, endDate) {
+    const start = parseISO(startDate);
+    const currentDate = new Date();
+    console.log("currentDate:", currentDate);
+    console.log("start:", start);
+    console.log("end", endDate);
+
+    return isAfter(currentDate, start) && isBefore(currentDate, endDate)
+      ? "Active"
+      : "Scheduled";
   }
 
-  console.log("PRE", { name, strategy, startDate, startTime, freq, endDate });
+  const status = checkStatus(startDate, endDate);
 
-  const response = createCampaign({
+  console.log("PRE", {
     name,
+    status,
     strategy,
     startDate,
     startTime,
     freq,
     endDate,
   });
-  return response;
+
+  // const response = createCampaign({
+  //   name,
+  //   strategy,
+  //   startDate,
+  //   startTime,
+  //   freq,
+  //   status,
+  //   endDate,
+  // });
+  return null;
 }
 
 export const loader: LoaderFunction = async (args) => {
@@ -152,7 +182,6 @@ export default function CampaignsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [selectedCampaign, setSelectedCampaign] = useState<any>({});
-  const [campaignName, setCampaignName] = useState("untitled");
   const [strategy, setStrategy] = useState<string>("Email");
   const [freqValue, setFreqValue] = useState("Weekly");
 
@@ -160,13 +189,14 @@ export default function CampaignsPage() {
 
   const campaigns = useLoaderData<typeof loader>();
 
-  console.log(campaignsData);
   console.log(startDate?.toISOString());
   const filteredCampaigns = campaigns.filter(
     (campaign) =>
       campaign.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (statusFilter === "All" || campaign.status === statusFilter),
   );
+
+  console.log(new Date(campaigns[1].startDate));
   const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const time = e.target.value;
     if (!startDate) {
@@ -362,6 +392,7 @@ export default function CampaignsPage() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Freq</TableHead>
                   <TableHead>Start Date</TableHead>
                   <TableHead>End Date</TableHead>
 
@@ -389,7 +420,7 @@ export default function CampaignsPage() {
                         <TableCell>
                           <Badge
                             variant={
-                              campaign.status === "Active"
+                              campaign.endDate === "Active"
                                 ? "default"
                                 : "secondary"
                             }
@@ -397,11 +428,12 @@ export default function CampaignsPage() {
                             {campaign.status}
                           </Badge>
                         </TableCell>
+                        <TableCell>{campaign.freq}</TableCell>
                         <TableCell>{campaign.startDate}</TableCell>
                         <TableCell>
                           {campaign.endDate ?? campaign.startDate}
                         </TableCell>
-                        <TableCell>{campaign.conversions ?? ""}</TableCell>
+                        <TableCell>{campaign.conversions ?? 0}</TableCell>
                         <TableCell className="text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>

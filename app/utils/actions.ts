@@ -1,6 +1,7 @@
 import Campaign from "~/Models/Campaign";
 import { connectDB } from "./db";
 import Accounts from "~/Models/Accounts";
+import { isAfter, parseISO } from "date-fns";
 
 export async function createProfile({
   email,
@@ -53,6 +54,7 @@ export async function createCampaign({
   startDate,
   startTime,
   freq,
+  status,
   endDate,
 }: {
   name: FormDataEntryValue | null;
@@ -61,6 +63,7 @@ export async function createCampaign({
   startTime: FormDataEntryValue | null;
   freq: FormDataEntryValue | null;
   endDate: FormDataEntryValue | null;
+  status: string;
 }) {
   const newCampaign = new Campaign({
     name,
@@ -68,6 +71,7 @@ export async function createCampaign({
     freq,
     startTime,
     startDate,
+    status,
     endDate,
   });
 
