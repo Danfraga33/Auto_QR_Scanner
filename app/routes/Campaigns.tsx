@@ -85,93 +85,100 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { Separator } from "~/components/ui/separator";
-import { createCampaign } from "~/utils/actions";
-import { ActionFunctionArgs, LoaderFunction, redirect } from "@remix-run/node";
+import { createCampaign, getCampaign } from "~/utils/actions";
+import {
+  ActionFunctionArgs,
+  LoaderFunction,
+  json,
+  redirect,
+} from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import { setHours, setMinutes } from "date-fns";
+import { setHours, setMinutes, addWeeks } from "date-fns";
 import { useAuth } from "@clerk/remix";
 import { getAuth } from "@clerk/remix/ssr.server";
 import { createClerkClient } from "@clerk/remix/api.server";
 
-export const loader: LoaderFunction = async (args) => {
-  // Use getAuth() to retrieve the user's ID
-  const { userId } = await getAuth(args);
-
-  // If there is no userId, then redirect to sign-in route
-  if (!userId) {
-    return redirect("/sign-in?redirect_url=" + args.request.url);
+export async function action({ request }: ActionFunctionArgs) {
+  function addWeekToDate(date: string) {
+    const newDate = new Date(date); // Create a copy of the input date
+    newDate.setDate(newDate.getDate() + 7); // Add 7 days
+    return newDate.toISOString();
   }
 
-  // Initialize clerkClient and perform an operation
-  const user = await createClerkClient({
-    secretKey: process.env.CLERK_SECRET_KEY,
-  }).users.getUser(userId);
-
-  // Return the retrieved user data
-  return { serialisedUser: JSON.stringify(user) };
-};
-
-export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
+  const startingDate = body.get("startDate") as string;
+
   const name = body.get("name") as string;
-  const startDate = body.get("startDate") as string;
-  const startTime = body.get("startTime") as string;
   const strategy = body.get("strategy") as string;
   const freq = body.get("freq") as string;
+  const startDate = body.get("startDate") as string;
+  const startTime = body.get("startTime") as string;
+  let endDate;
+  switch (freq) {
+    case "Weekly":
+      endDate = addWeekToDate(startingDate);
+      break;
+    default:
+      console.log("No frequency specified or unsupported frequency.");
+      break;
+  }
 
-  console.log({
-    name,
-    strategy,
-    startDate,
-    startTime,
-    freq,
-  });
+  console.log("PRE", { name, strategy, startDate, startTime, freq, endDate });
+
   const response = createCampaign({
     name,
     strategy,
     startDate,
     startTime,
     freq,
+    endDate,
   });
-  redirect("/");
   return response;
 }
 
+export const loader: LoaderFunction = async (args) => {
+  const { userId } = await getAuth(args);
+  if (!userId) {
+    return redirect("/");
+  }
+  const data = await getCampaign();
+  return json(data);
+};
+
 export default function CampaignsPage() {
-  const [selected, setSelected] = useState<Date>();
+  const [startDate, setStartDate] = useState<Date>();
   const [campaignDateRange, setCampaignDateRange] = useState<Date[]>([]);
-  const [campaigns, setCampaigns] = useState(campaignsData);
+  // const [campaigns, setCampaigns] = useState(campaignsData);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [selectedCampaign, setSelectedCampaign] = useState<any>({});
   const [campaignName, setCampaignName] = useState("untitled");
+  const [strategy, setStrategy] = useState<string>("Email");
   const [freqValue, setFreqValue] = useState("Weekly");
 
   const [timeValue, setTimeValue] = useState<string>("00:00");
 
-  const data = useLoaderData<typeof loader>();
-  console.log(data);
+  const campaigns = useLoaderData<typeof loader>();
 
   console.log(campaignsData);
-  console.log(selected?.toISOString());
-
-  const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const time = e.target.value;
-    if (!selected) {
-      setTimeValue(time);
-      return;
-    }
-    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
-    const newSelectedDate = setHours(setMinutes(selected, minutes), hours);
-    setSelected(newSelectedDate);
-    setTimeValue(time);
-  };
-
+  console.log(startDate?.toISOString());
   const filteredCampaigns = campaigns.filter(
     (campaign) =>
       campaign.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (statusFilter === "All" || campaign.status === statusFilter),
   );
+  const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const time = e.target.value;
+    if (!startDate) {
+      setTimeValue(time);
+      return;
+    }
+
+    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
+    const newSelectedDate = setHours(setMinutes(startDate, minutes), hours);
+    setStartDate(newSelectedDate);
+    setTimeValue(time);
+  };
 
   const handleDeleteCampaign = (id: number) => {
     setCampaigns(campaigns.filter((campaign) => campaign.id !== id));
@@ -205,7 +212,7 @@ export default function CampaignsPage() {
           </div>
           <Sheet>
             <Button asChild>
-              <SheetTrigger onClick={() => setSelected(undefined)}>
+              <SheetTrigger onClick={() => setStartDate(undefined)}>
                 <Plus className="mr-2 h-4 w-4" />
                 Create Campaign
               </SheetTrigger>
@@ -217,87 +224,96 @@ export default function CampaignsPage() {
                   <SheetDescription>
                     Insert the required inputs to create a new campaign
                   </SheetDescription>
-                  <Separator className="my-4" />
-                  <div className="flex items-center gap-3">
-                    <Label htmlFor="name" className="text-md">
-                      Name:
-                    </Label>
-                    <Input
-                      placeholder="untitled"
-                      name="name"
-                      defaultValue="untitled"
-                      id="name"
-                    />
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <label htmlFor="strategy">Strategy</label>
-                    <input
-                      id="strategy"
-                      type="text"
-                      name="strategy"
-                      className="border border-1 px-4 py-1 rounded-lg "
-                    />
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Label htmlFor="freq" className="text-md">
-                      Frequency:
-                    </Label>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="default" value={freqValue}>
-                          {freqValue}
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => setFreqValue("Daily")}>
-                          Daily
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => setFreqValue("Weekly")}
-                        >
-                          Weekly
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => setFreqValue("Monthly")}
-                        >
-                          Monthly
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <input type="text" hidden value={freqValue} name="freq" />
-                  </div>
-                  <Separator />
-                  <Label className="text-sm">Pick Start and End Date:</Label>
-                  <Input
-                    type="time"
-                    value={timeValue}
-                    onChange={handleTimeChange}
-                    name="startTime"
-                  />
-                  <div className="flex justify-center  items-center gap-3">
-                    <CalendarComp
-                      selected={selected}
-                      onSelect={setSelected}
-                      mode="single"
-                      footer={
-                        selected
-                          ? `Selected: ${selected.toLocaleDateString()}`
-                          : "Pick a day."
-                      }
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    value={selected?.toISOString()}
-                    hidden
-                    name="startDate"
-                  />
                 </SheetHeader>
+                <Separator className="my-4" />
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="name" className="text-md">
+                    Name:
+                  </Label>
+                  <Input
+                    placeholder="untitled"
+                    name="name"
+                    defaultValue="untitled"
+                    id="name"
+                  />
+                </div>
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="strategy">Strategy</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="default"
+                        value={strategy}
+                        onClick={() => setStrategy("Email")}
+                      >
+                        {strategy}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => setStrategy("Email")}>
+                        Email
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => setStrategy("SMS")}>
+                        SMS
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <input type="text" name="strategy" value={strategy} hidden />
+                </div>
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="freq">Frequency:</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="default" value={freqValue}>
+                        {freqValue}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => setFreqValue("Daily")}>
+                        Daily
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => setFreqValue("Weekly")}>
+                        Weekly
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => setFreqValue("Monthly")}>
+                        Monthly
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <input type="text" hidden value={freqValue} name="freq" />
+                </div>
+                <Separator />
+                <Label className="text-sm">Pick Start and End Date:</Label>
+                <Input
+                  type="time"
+                  value={timeValue}
+                  onChange={handleTimeChange}
+                  name="startTime"
+                />
+                <div className="flex justify-center items-center gap-3 py-3">
+                  <CalendarComp
+                    selected={startDate}
+                    onSelect={setStartDate}
+                    mode="single"
+                    footer={
+                      startDate ? `Selected: ${startDate}` : "Pick a day."
+                    }
+                  />
+                </div>
+                <Separator />
+                <input
+                  type="text"
+                  value={startDate?.toISOString()}
+                  hidden
+                  name="startDate"
+                />
+
                 <SheetFooter>
                   <SheetClose asChild>
-                    <Button type="submit">
+                    <Button type="submit" className="py-3">
                       <span>
                         <Check />
                       </span>
@@ -381,11 +397,11 @@ export default function CampaignsPage() {
                             {campaign.status}
                           </Badge>
                         </TableCell>
+                        <TableCell>{campaign.startDate}</TableCell>
                         <TableCell>
-                          {campaign.startDate.split("T")[0]}
+                          {campaign.endDate ?? campaign.startDate}
                         </TableCell>
-                        <TableCell>{campaign.endDate.split("T")[0]}</TableCell>
-                        <TableCell>{campaign.conversions}</TableCell>
+                        <TableCell>{campaign.conversions ?? ""}</TableCell>
                         <TableCell className="text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>

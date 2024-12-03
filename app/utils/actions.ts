@@ -53,19 +53,22 @@ export async function createCampaign({
   startDate,
   startTime,
   freq,
+  endDate,
 }: {
   name: FormDataEntryValue | null;
   strategy: FormDataEntryValue | null;
   startDate: FormDataEntryValue | null;
   startTime: FormDataEntryValue | null;
   freq: FormDataEntryValue | null;
+  endDate: FormDataEntryValue | null;
 }) {
   const newCampaign = new Campaign({
     name,
     strategy,
+    freq,
     startTime,
     startDate,
-    freq,
+    endDate,
   });
 
   const result = await newCampaign.save();

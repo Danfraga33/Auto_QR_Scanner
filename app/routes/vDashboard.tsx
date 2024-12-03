@@ -3,6 +3,7 @@ import SidebarComp from "~/components/Sidebar";
 import marketingAppData from "../lib/data/marketingAppData.json";
 import campaignData from "~/lib/data/campaigns.json";
 import { Progress } from "~/components/ui/progress";
+import MetricCard from "~/components/MetricCard";
 
 export default function MarketingApp() {
   return (
@@ -20,28 +21,6 @@ export default function MarketingApp() {
         </div>
       </div>
     </SidebarComp>
-  );
-}
-
-function MetricCard({
-  title,
-  value,
-  icon: Icon,
-}: {
-  title: string;
-  value: string;
-  icon: LucideIcon;
-}) {
-  return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-      <div className="p-6">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">{title}</span>
-          <Icon className="h-4 w-4 text-muted-foreground" />
-        </div>
-        <div className="mt-2 text-2xl font-bold">{value}</div>
-      </div>
-    </div>
   );
 }
 
