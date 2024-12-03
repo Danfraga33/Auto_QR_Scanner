@@ -53,6 +53,7 @@ export async function createCampaign({
   strategy,
   startDate,
   startTime,
+  schedule,
   freq,
   status,
   endDate,
@@ -61,6 +62,7 @@ export async function createCampaign({
   strategy: FormDataEntryValue | null;
   startDate: FormDataEntryValue | null;
   startTime: FormDataEntryValue | null;
+  schedule: string[];
   freq: FormDataEntryValue | null;
   endDate: FormDataEntryValue | null;
   status: string;
@@ -71,6 +73,7 @@ export async function createCampaign({
     freq,
     startTime,
     startDate,
+    schedule,
     status,
     endDate,
   });
