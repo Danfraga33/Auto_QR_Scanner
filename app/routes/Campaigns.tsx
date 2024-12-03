@@ -69,7 +69,6 @@ import {
 } from "~/components/ui/dialog";
 import { Label } from "~/components/ui/label";
 import { ChangeEventHandler, useState } from "react";
-import campaignsData from "~/lib/data/campaigns.json";
 import { CalendarComp } from "~/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import MetricCard from "~/components/MetricCard";
@@ -93,44 +92,35 @@ import {
   redirect,
 } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import {
-  setHours,
-  setMinutes,
-  addWeeks,
-  parseISO,
-  isAfter,
-  isBefore,
-} from "date-fns";
-import { useAuth } from "@clerk/remix";
+import { setHours, setMinutes, parseISO, isAfter, isBefore } from "date-fns";
 import { getAuth } from "@clerk/remix/ssr.server";
-import { createClerkClient } from "@clerk/remix/api.server";
 
 export async function action({ request }: ActionFunctionArgs) {
-  function addWeekToDate(date: string) {
-    const newDate = new Date(date); // Create a copy of the input date
-    newDate.setDate(newDate.getDate() + 7); // Add 7 days
-    return newDate.toISOString();
-  }
-
   const body = await request.formData();
-  const startingDate = body.get("startDate") as string;
 
   const name = body.get("name") as string;
   const strategy = body.get("strategy") as string;
   const freq = body.get("freq") as string;
   const startDate = body.get("startDate") as string;
   const startTime = body.get("startTime") as string;
-  const endDate = new Date("2024-12-20T14:00:00");
-  // let endDate;
-  // switch (freq) {
-  //   case "Weekly":
-  //     endDate = addWeekToDate(startingDate);
-  //     break;
-  //   default:
-  //     console.log("No frequency specified or unsupported frequency.");
-  //     break;
-  // }
-  function checkStatus(startDate, endDate) {
+  const endDate = "2024-12-27T14:00:00";
+  const startingDate = new Date(startDate);
+  const endingDate = new Date(endDate);
+
+  const schedule: string[] = [];
+  if (freq === "Weekly") {
+    while (startingDate <= endingDate) {
+      startingDate.setDate(startingDate.getDate() + 7);
+      schedule.push(startingDate.toISOString());
+    }
+  } else if (freq === "Monthly") {
+    while (startingDate <= endingDate) {
+      startingDate.setDate(startingDate.getDate() + 30);
+      schedule.push(startingDate.toISOString());
+    }
+  }
+
+  function checkStatus(startDate: string, endDate: string) {
     const start = parseISO(startDate);
     const currentDate = new Date();
     console.log("currentDate:", currentDate);
@@ -150,6 +140,7 @@ export async function action({ request }: ActionFunctionArgs) {
     strategy,
     startDate,
     startTime,
+    schedule,
     freq,
     endDate,
   });
@@ -159,6 +150,7 @@ export async function action({ request }: ActionFunctionArgs) {
   //   strategy,
   //   startDate,
   //   startTime,
+  //   schedule,
   //   freq,
   //   status,
   //   endDate,
@@ -184,7 +176,6 @@ export default function CampaignsPage() {
   const [selectedCampaign, setSelectedCampaign] = useState<any>({});
   const [strategy, setStrategy] = useState<string>("Email");
   const [freqValue, setFreqValue] = useState("Weekly");
-
   const [timeValue, setTimeValue] = useState<string>("00:00");
 
   const campaigns = useLoaderData<typeof loader>();
