@@ -107,16 +107,16 @@ export async function action({ request }: ActionFunctionArgs) {
   const startingDate = new Date(startDate);
   const endingDate = new Date(endDate);
 
-  const schedule: string[] = [];
+  const schedule: Date[] = [];
   if (freq === "Weekly") {
     while (startingDate <= endingDate) {
+      schedule.push(new Date(startingDate));
       startingDate.setDate(startingDate.getDate() + 7);
-      schedule.push(startingDate.toISOString());
     }
   } else if (freq === "Monthly") {
     while (startingDate <= endingDate) {
+      schedule.push(new Date(startingDate));
       startingDate.setDate(startingDate.getDate() + 30);
-      schedule.push(startingDate.toISOString());
     }
   }
 
@@ -145,17 +145,17 @@ export async function action({ request }: ActionFunctionArgs) {
     endDate,
   });
 
-  // const response = createCampaign({
-  //   name,
-  //   strategy,
-  //   startDate,
-  //   startTime,
-  //   schedule,
-  //   freq,
-  //   status,
-  //   endDate,
-  // });
-  return null;
+  const response = createCampaign({
+    name,
+    strategy,
+    startDate,
+    startTime,
+    schedule,
+    freq,
+    status,
+    endDate,
+  });
+  return response;
 }
 
 export const loader: LoaderFunction = async (args) => {
@@ -168,8 +168,8 @@ export const loader: LoaderFunction = async (args) => {
 };
 
 export default function CampaignsPage() {
-  const [startDate, setStartDate] = useState<Date>();
-  const [campaignDateRange, setCampaignDateRange] = useState<Date[]>([]);
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [campaignDateRange, setCampaignSchedule] = useState<Date[]>([]);
   // const [campaigns, setCampaigns] = useState(campaignsData);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -180,14 +180,13 @@ export default function CampaignsPage() {
 
   const campaigns = useLoaderData<typeof loader>();
 
-  console.log(startDate?.toISOString());
+  // console.log(selectedCampaign.schedule.map((date) => new Date(date)));
   const filteredCampaigns = campaigns.filter(
     (campaign) =>
       campaign.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (statusFilter === "All" || campaign.status === statusFilter),
   );
 
-  console.log(new Date(campaigns[1].startDate));
   const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const time = e.target.value;
     if (!startDate) {
@@ -396,10 +395,7 @@ export default function CampaignsPage() {
                   <Dialog>
                     <DialogTrigger
                       onClick={() => {
-                        setCampaignDateRange([
-                          new Date(campaign.startDate),
-                          new Date(campaign.endDate),
-                        ]);
+                        setCampaignSchedule(campaign.schedule);
                         setSelectedCampaign(campaign);
                       }}
                       asChild
@@ -532,7 +528,10 @@ export default function CampaignsPage() {
                         </div>
                         <CalendarComp
                           className="flex justify-center w-full"
-                          selected={campaignDateRange}
+                          selected={campaignDateRange.map(
+                            (date) => new Date(date),
+                          )}
+                          mode="multiple"
                         />
 
                         <DialogFooter>

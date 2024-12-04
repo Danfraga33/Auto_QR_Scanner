@@ -62,7 +62,7 @@ export async function createCampaign({
   strategy: FormDataEntryValue | null;
   startDate: FormDataEntryValue | null;
   startTime: FormDataEntryValue | null;
-  schedule: string[];
+  schedule: Date[];
   freq: FormDataEntryValue | null;
   endDate: FormDataEntryValue | null;
   status: string;
