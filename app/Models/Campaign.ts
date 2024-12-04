@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const campaignSchema = new mongoose.Schema({
+const campaignSchema = new Schema({
   name: { type: String, required: true },
   status: { type: String, required: true },
   strategy: { type: String, required: true, default: "Email" },
@@ -8,6 +8,7 @@ const campaignSchema = new mongoose.Schema({
   startTime: { type: String, required: true },
   freq: { type: String, required: true },
   endDate: { type: String, required: true },
+  schedule: { type: [Date], required: true },
 });
 
 export default mongoose.models?.Campaign ||
