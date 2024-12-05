@@ -1,334 +1,499 @@
-import { useState } from "react";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/src/style.css";
-import { Form, Link, json, useLoaderData } from "@remix-run/react";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import {
+  BarChartIcon,
+  Calendar,
+  Check,
+  CheckCheck,
+  Edit,
+  Mail,
+  MoreHorizontal,
+  Mouse,
+  Plus,
+  Target,
+  Trash,
+} from "lucide-react";
+
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
+import SidebarComp from "~/components/Sidebar";
+import { Dialog, DialogTrigger } from "~/components/ui/dialog";
+import { Label } from "~/components/ui/label";
+import { ChangeEventHandler, useState } from "react";
+import { CalendarComp } from "~/components/ui/calendar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import MetricCard from "~/components/MetricCard";
+import { Progress } from "~/components/ui/progress";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet";
+import { Separator } from "~/components/ui/separator";
 import { createCampaign, getCampaign } from "~/utils/actions";
-import { getAuth } from "@clerk/remix/ssr.server";
-import { LoaderFunction } from "@remix-run/node";
-import { UserButton } from "@clerk/remix";
-type Campaign = {
-  campaignName: string;
-  startDate: string;
-  endDate: string;
-};
+import { ActionFunctionArgs, LoaderFunction, json } from "@remix-run/node";
+import { Form, Link, useLoaderData } from "@remix-run/react";
+import { setHours, setMinutes, parseISO, isAfter, isBefore } from "date-fns";
+
+// export const action = async ({ params }: ActionFunctionArgs) => {
+//   invariant(params.contactId, "Missing contactId param");
+//   await deleteCampaign();
+//   return redirect("/");
+// };
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
+
   const name = body.get("name") as string;
-  const campaignType = body.get("campaignType") as string;
+  const strategy = body.get("strategy") as string;
+  const freq = body.get("freq") as string;
   const startDate = body.get("startDate") as string;
-  const endDate = body.get("endDate") as string;
-  const method = body.get("method") as string;
-  const response = createCampaign({
-    method,
-    startDate,
-    endDate,
-    campaignType,
+  const startTime = body.get("startTime") as string;
+  const endDate = "2024-12-27T14:00:00";
+  const startingDate = new Date(startDate);
+  const endingDate = new Date(endDate);
+
+  const schedule: Date[] = [];
+  if (freq === "Weekly") {
+    while (startingDate <= endingDate) {
+      schedule.push(new Date(startingDate));
+      startingDate.setDate(startingDate.getDate() + 7);
+    }
+  } else if (freq === "Monthly") {
+    while (startingDate <= endingDate) {
+      schedule.push(new Date(startingDate));
+      startingDate.setDate(startingDate.getDate() + 30);
+    }
+  }
+
+  function checkStatus(startDate: string, endDate: string) {
+    const start = parseISO(startDate);
+    const currentDate = new Date();
+    console.log("currentDate:", currentDate);
+    console.log("start:", start);
+    console.log("end", endDate);
+
+    return isAfter(currentDate, start) && isBefore(currentDate, endDate)
+      ? "Active"
+      : "Scheduled";
+  }
+
+  const status = checkStatus(startDate, endDate);
+
+  console.log("PRE", {
     name,
+    status,
+    strategy,
+    startDate,
+    startTime,
+    schedule,
+    freq,
+    endDate,
   });
-  // console.log(response);
-  redirect("/");
+
+  const response = createCampaign({
+    name,
+    strategy,
+    startDate,
+    startTime,
+    schedule,
+    freq,
+    status,
+    endDate,
+  });
   return response;
 }
 
-// export const loader: LoaderFunction = async (args) => {
-// 	return {};
-// };
-
-export const loader: LoaderFunction = async (args) => {
-  const { userId } = await getAuth(args);
-  if (!userId) {
-    return redirect("/");
-  }
+export const loader: LoaderFunction = async () => {
   const data = await getCampaign();
   return json(data);
 };
 
-const CampaignBuilder = () => {
-  const [campaignDates, setCampaignDates] = useState<Date[] | undefined>();
-  const [newCampaignDates, setNewCampaignDates] = useState<
-    Date[] | undefined
-  >();
+export default function CampaignsPage() {
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [campaignSchedule, setCampaignSchedule] = useState<Date[]>([]);
+  // const [campaigns, setCampaigns] = useState(campaignsData);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [selectedCampaign, setSelectedCampaign] = useState<any>({});
+  const [strategy, setStrategy] = useState<string>("Email");
+  const [freqValue, setFreqValue] = useState("Weekly");
+  const [timeValue, setTimeValue] = useState<string>("00:00");
 
   const campaigns = useLoaderData<typeof loader>();
 
-  const [marketingCampaign, setMarketingCampaign] = useState<any>({
-    campaignName: "",
-    startDate: "",
-    endDate: "",
-  });
+  // console.log(selectedCampaign.schedule.map((date) => new Date(date)));
+  const filteredCampaigns = campaigns.filter(
+    (campaign) =>
+      campaign.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (statusFilter === "All" || campaign.status === statusFilter),
+  );
 
-  const marketingCampaignDates: Date[] = [new Date()];
-  campaigns?.map((campaign) => {
-    const date = new Date(campaign.startDate);
-    // console.log(date);
-    marketingCampaignDates.push(new Date());
-  });
+  const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const time = e.target.value;
+    if (!startDate) {
+      setTimeValue(time);
+      return;
+    }
 
-  // console.log(marketingCampaignDates);
-
-  const updateCampaign = (
-    campaignName: string,
-    campaignStartDate: string,
-    campaignEndDate: string,
-  ) => {
-    setMarketingCampaign((prevCampaign: Campaign) => ({
-      ...prevCampaign,
-      campaignName: campaignName,
-      startDate: campaignStartDate,
-      endDate: campaignEndDate,
-    }));
+    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
+    const newSelectedDate = setHours(setMinutes(startDate, minutes), hours);
+    setStartDate(newSelectedDate);
+    setTimeValue(time);
   };
 
   return (
-    // <div className="flex justify-center w-full items-center h-screen ">
-    <div className="flex justify-around py-2">
-      <div className="flex flex-col gap-4">
-        <UserButton />
-        <Link to="/Dashboard">Dashboard</Link>
-        <hr />
-        <div className="underline "> New Campaign</div>
-        <Form method="post" className="flex flex-col">
-          <label htmlFor="campaignName">Campaign Name</label>
-          <input
-            defaultValue="Untitled"
-            type="text"
-            name="name"
-            id="campaignName"
-            className="border-2 border-gray-300 rounded-lg px-1"
-            required
+    <SidebarComp>
+      <div className="flex flex-col gap-4 p-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center">
+          <Input
+            placeholder="Search campaigns..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="md:w-[300px]"
           />
-          <label htmlFor="">Select campaign type</label>
-          <div className="flex flex-col gap-2">
-            <select
-              name="campaignType"
-              id="campaignType"
-              className="border-2 rounded-lg px-1"
-              required
-            >
-              <option value="oneOff">One-Off</option>
-              <option value="period">Period</option>
-            </select>
-            <label htmlFor="date">Select "Send-out" start date</label>
-            <select
-              id="date"
-              className="border-2 border-gray-300 rounded-lg px-1"
-              name="startDate"
-              defaultValue="Random Date"
-              required
-            >
-              <option value="Start Date">Put</option>
-              <option value="">a</option>
-              <option value="">Calendar</option>
-              <option value="">Here</option>
-            </select>
-            <label htmlFor="date">Select "Send-out" end-date</label>
-            <select
-              id="date"
-              className="border-2 border-gray-300 rounded-lg px-1"
-              name="endDate"
-              defaultValue="Random Date"
-              required
-            >
-              <option value="End Date">Put</option>
-            </select>
-          </div>
-          <label htmlFor="method">Method</label>
-          <select
-            name="method"
-            id="Method"
-            className="border-2 border-gray-300 rounded-lg px-1"
-            required
-          >
-            <option value="SMS">SMS</option>
-            <option value="Email">Email</option>
-          </select>
-          <label htmlFor="frequency">Frequency</label>
-          <select
-            name="frequency"
-            id="frequency"
-            className="border-2 border-gray-300 rounded-lg px-1"
-            required
-          >
-            <option value="weekly">insert</option>
-            <option value="Email">calender</option>
-            <option value="Email">or </option>
-            <option value="Email">some other form </option>
-          </select>
-          <div className="flex flex-col gap-1 mt-2 border-lg border-1 ">
-            <button className="text-sm border-lg border-1">SMS Template</button>
-            <button>Email Template</button>
-          </div>
-          <button type="submit">Add Campaign</button>
-        </Form>
-        <hr />
-        <hr />
-        <h1 className="underline ">Mass Blast Marketing Campaigns</h1>
-        {campaigns.map((campaign) => (
-          <ul
-            className="border-2 rounded-lg p-3 border-gray-500 flex-1 flex gap-2 flex-col overflow-scroll"
-            key={campaign.id}
-          >
-            <button
-              className="flex justify-start hover:text-lime-500 transition-all"
-              onClick={() =>
-                updateCampaign(
-                  campaign.name,
-                  campaign.startDate,
-                  campaign.endDate,
-                )
-              }
-            >
-              <li
-                value="BuyOneGetOne"
-                id={campaign.type}
-                className="flex flex-col gap-2"
-              >
-                <h1 className="font-semibold">{campaign.name}</h1>
-                <p className="text-start">
-                  Start Date:
-                  <br />
-                  <span>{campaign.startDate}</span>
-                </p>
-                <p className="text-start">
-                  End Date: <br />
-                  <span>{campaign.endDate}</span>
-                </p>
-              </li>
-            </button>
-          </ul>
-        ))}
-      </div>
-      <div>
-        <h1 className="w-1/2">Schedule</h1>
-        {!campaignDates?.length ? (
-          <>
-            <p>Please select a Date</p>
-          </>
-        ) : (
-          <ul>
-            {campaignDates?.map((entry) => (
-              <div key={entry.toString()}>
-                {/* <h1>{marketingCampaign.campaignName}</h1> */}
-                <li>{entry.toString()}</li>
-              </div>
-            ))}
-          </ul>
-        )}
-        {!marketingCampaign.campaignName ? (
-          <p>Select a campaign</p>
-        ) : (
-          <div>
-            <h1 className="font-semibold">{marketingCampaign.campaignName}</h1>
-            <p>
-              Start Date: <span>{marketingCampaign.startDate}</span>
-            </p>
-            <p>
-              End Date: <span>{marketingCampaign.endDate}</span>
-            </p>
-            <div className="flex flex-col gap-2 ">
-              <button className="border rounded-lg px-1 inline border-orange-400">
-                Change Frequency
-              </button>
-              <div className="flex gap-1 w-full">
-                <button className="border rounded-lg p-1 border-red-600 bg-gray-200 ">
-                  Delete
-                </button>
-                <button className="border rounded-lg p-1 border-yellow-200 bg-gray-200 ">
-                  Edit
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="flex flex-col justify-start gap-1">
-        <DayPicker
-          mode="multiple"
-          // selected={selected}
-          selected={marketingCampaignDates}
-          onSelect={setNewCampaignDates}
-          onDayClick={() => console.log("Hello")}
-        />
-        <div className="flex flex-col gap-2">
-          <h1 className="font-semibold underline">Filter</h1>
-          <div className="flex flex-col gap-2 ">
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="sms"
-                className="border-2 rounded-lg p-1"
-                name="group1"
-              />
-              <label htmlFor="sms">SMS</label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="email"
-                className="border-2 rounded-lg p-1"
-                name="group1"
-              />
-              <label htmlFor="email">Email</label>
-            </div>
-          </div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="md:w-[180px]">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Status</SelectLabel>
+                <SelectItem value="All">All</SelectItem>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Scheduled">Scheduled</SelectItem>
+                <SelectItem value="Draft">Draft</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
+        <Sheet>
+          <Button asChild>
+            <SheetTrigger onClick={() => setStartDate(undefined)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Create Campaign
+            </SheetTrigger>
+          </Button>
+          <SheetContent>
+            <Form method="post">
+              <SheetHeader>
+                <SheetTitle>Create new campaign</SheetTitle>
+                <SheetDescription>
+                  Insert the required inputs to create a new campaign
+                </SheetDescription>
+              </SheetHeader>
+              <Separator className="my-4" />
+              <div className="flex flex-col gap-2 py-1">
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="name" className="text-md">
+                    Name:
+                  </Label>
+                  <Input
+                    placeholder="untitled"
+                    name="name"
+                    defaultValue="untitled"
+                    id="name"
+                  />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="strategy">Strategy</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="default"
+                        value={strategy}
+                        onClick={() => setStrategy("Email")}
+                      >
+                        {strategy}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => setStrategy("Email")}>
+                        Email
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => setStrategy("SMS")}>
+                        SMS
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <input type="text" name="strategy" value={strategy} hidden />
+                </div>
+                <div className="flex items-center gap-3">
+                  <Label htmlFor="freq">Frequency:</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="default" value={freqValue}>
+                        {freqValue}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => setFreqValue("Daily")}>
+                        Daily
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => setFreqValue("Weekly")}>
+                        Weekly
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => setFreqValue("Monthly")}>
+                        Monthly
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <input type="text" hidden value={freqValue} name="freq" />
+                </div>
+              </div>
+              <Separator />
+              <div className="py-2 gap-2 flex flex-col items-start">
+                <Label className="text-sm">Pick Start and End Date:</Label>
+                <Input
+                  type="time"
+                  value={timeValue}
+                  onChange={handleTimeChange}
+                  name="startTime"
+                />
+                <div className="flex justify-center items-center gap-3 py-3">
+                  <CalendarComp
+                    selected={startDate}
+                    onSelect={setStartDate}
+                    mode="single"
+                    footer={
+                      startDate ? `Selected: ${startDate}` : "Pick a day."
+                    }
+                  />
+                </div>
+              </div>
+              <Separator />
+              <input
+                type="text"
+                value={startDate?.toISOString()}
+                hidden
+                name="startDate"
+              />
+
+              <SheetFooter>
+                <SheetClose asChild>
+                  <Button type="submit" className="my-2">
+                    <span>
+                      <Check />
+                    </span>
+                    Save campaign
+                  </Button>
+                </SheetClose>
+              </SheetFooter>
+            </Form>
+          </SheetContent>
+        </Sheet>{" "}
       </div>
-      {/* <CalendarComp /> */}
-    </div>
+
+      <div className="grid gap-4 p-3 md:grid-cols-2 lg:grid-cols-3">
+        <MetricCard title="Active Campaigns" value="3" icon={Target} />
+
+        <MetricCard
+          title="Total Campaigns"
+          value={campaigns.length.toString()}
+          icon={Target}
+        />
+        <MetricCard
+          title="Active Campaigns"
+          value={campaigns
+            .filter((c) => c.status === "Active")
+            .length.toString()}
+          icon={BarChartIcon}
+        />
+        {/* <MetricCard
+            title="Total Leads"
+            value={campaigns.reduce((sum, c) => sum + c.leads, 0).toString()}
+            icon={Target}
+          /> */}
+      </div>
+      <div className="p-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>Campaign List</CardTitle>
+            <CardDescription>Manage your marketing campaigns</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Freq</TableHead>
+                  <TableHead>Start Date</TableHead>
+                  <TableHead>End Date</TableHead>
+
+                  <TableHead>Conversions</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredCampaigns.map((campaign) => (
+                  <Dialog>
+                    <DialogTrigger
+                      onClick={() => {
+                        setCampaignSchedule(campaign.schedule);
+                        setSelectedCampaign(campaign);
+                      }}
+                      asChild
+                    >
+                      <TableRow key={campaign.id}>
+                        <TableCell className="font-medium">
+                          {campaign.name}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={
+                              campaign.endDate === "Active"
+                                ? "default"
+                                : "secondary"
+                            }
+                          >
+                            {campaign.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{campaign.freq}</TableCell>
+                        <TableCell>{campaign.startDate}</TableCell>
+                        <TableCell>
+                          {campaign.endDate ?? campaign.startDate}
+                        </TableCell>
+                        <TableCell>{campaign.conversions ?? 0}</TableCell>
+                        <TableCell className="text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem>
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Calendar className="mr-2 h-4 w-4" />
+                                View Schedule
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <BarChartIcon className="mr-2 h-4 w-4" />
+                                View Analytics
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem>
+                                <Trash className="mr-2 h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    </DialogTrigger>
+                  </Dialog>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+      {Object.keys(selectedCampaign).length > 0 ? (
+        <Tabs defaultValue="performance" className="w-full">
+          <TabsList className="grid w-full grid-cols-1">
+            <TabsTrigger value="performance">Overview</TabsTrigger>
+          </TabsList>
+          <TabsContent value="performance">
+            <Card>
+              <CardHeader>
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <CardTitle>
+                      {selectedCampaign.name ?? "Performance"}
+                    </CardTitle>
+                    <CardDescription>
+                      Campaign Performance Metrics
+                    </CardDescription>
+                  </div>{" "}
+                  <Link to={`/campaigns/${selectedCampaign._id}`}>
+                    <Button>Explore</Button>
+                  </Link>
+                </div>
+              </CardHeader>
+
+              <div className="flex flex-col px-3 gap-2 py-3">
+                <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 ">
+                  <MetricCard title="Emails/SMS Sent" value="221" icon={Mail} />
+                  <MetricCard
+                    title="Delivery Rate"
+                    value="98%"
+                    icon={CheckCheck}
+                  />
+                  <MetricCard title="CTR" value="82%" icon={Mouse} />
+                </div>
+                <div className="">
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold">Conversion Rate</h3>
+                    <div className="mt-4 space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span>0%</span>
+                          <span className="font-medium">100%</span>
+                        </div>
+                        <Progress
+                          value={
+                            (selectedCampaign.conversions /
+                              selectedCampaign.emailsSent) *
+                            100
+                          }
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      ) : null}
+    </SidebarComp>
   );
-};
-
-export default CampaignBuilder;
-
-// export async function loader() {
-// 	try {
-// 		connectDB();
-// 		const data = await Customer.find();
-// 		console.log(data);
-// 		return json(data, { status: 200 });
-// 	} catch (err) {
-// 		console.error(err);
-// 		return json({ error: err }, { status: 500 });
-// 	}
-// }
-
-// const Dashboard = () => {
-// 	const data = useLoaderData<typeof loader>();
-// 	let totalRevenue = data.reduce(
-// 		(total: number, customer) => total + customer.amount,
-// 		0
-// 	);
-
-// 	// Add delete functionality
-// 	return (
-// 		<div className="flex justify-center items-center h-screen  flex-col">
-// 			<div className="flex flex-col justify-between gap-2">
-// 				<Link to="/" className="flex justify-center item">
-// 					Home
-// 				</Link>
-// 				<h2 className="flex justify-center item">Customers:</h2>
-// 				{data.map((customer) => (
-// 					<div key={customer._id}>
-// 						<div>{customer.name}</div>
-// 						<div>{customer.email}</div>
-// 						<label htmlFor="purchased" className="mr-2">
-// 							Purchased
-// 						</label>
-// 						{customer.Purchased ? (
-// 							<input type="checkbox" id="purchased" checked readOnly />
-// 						) : (
-// 							<input type="checkbox" id="purchased" readOnly />
-// 						)}
-
-// 						<p>
-// 							Amount Purchased: <span> {customer.amount}</span>
-// 						</p>
-// 					</div>
-// 				))}
-// 				<h3>Total Campaign Revenue: {totalRevenue}</h3>
-// 			</div>
-// 		</div>
-// 	);
-// };
+}
