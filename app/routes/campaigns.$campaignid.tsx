@@ -10,6 +10,7 @@ import {
   Mail,
   MailIcon,
   MessageSquare,
+  MoreHorizontal,
   Mouse,
   Trash,
 } from "lucide-react";
@@ -26,6 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import {
   Table,
@@ -40,7 +42,7 @@ import { getCampaign } from "~/utils/actions";
 import leads from "~/lib/data/Leads.json";
 import { Separator } from "~/components/ui/separator";
 import DeleteCampaignButton from "~/components/DeleteCampaignButton";
-import { CalendarComp } from "~/components/ui/calendar";
+import { Button } from "~/components/ui/button";
 
 export const loader: LoaderFunction = async () => {
   const data = await getCampaign();
@@ -223,8 +225,8 @@ const SelectedCampaign = () => {
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Campaign</TableHead>
-                  <TableHead>Purchased</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-right">Purchased</TableHead>
+                  {/* <TableHead className="text-right">Actions</TableHead> */}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -238,31 +240,10 @@ const SelectedCampaign = () => {
                         <TableCell>{lead.email}</TableCell>
 
                         <TableCell>{lead.campaign ?? "Unassigned"}</TableCell>
-                        <TableCell>
+                        <TableCell className="text-right">
                           <Badge variant={true ? "default" : "secondary"}>
                             Purchased
                           </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-                              <DropdownMenuItem>
-                                <Calendar className="mr-2 h-4 w-4" />
-                                View Schedule
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <BarChartIcon className="mr-2 h-4 w-4" />
-                                View Analytics
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
-                                <Trash className="mr-2 h-4 w-4" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     </DialogTrigger>
