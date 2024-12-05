@@ -65,18 +65,15 @@ Components
 - Create new business profile form page
 - Save data from Clerk to MongoDB with Webhooks
 - Create custom signup page on clerk to get additional information.
-- Move Create Customer Fn to actions module
 - Fix Connection Strings for seperate connections
-- Save campaign to DB
 - Save Business Profiles to DB
 - Campaign data is being saved to customer data
-- Change Date type on Campaign(Date field) to Date
 - Make campaign creation work.
-- Add calendar to date form inputs
-- Transition to Shadcn
 - Make auth section (Middleware)
 - Set up Email/Sms with twillo
 - add dark mode
+- Create Landing Page
+- Create edit campaign page
 
 #### To do Later
 
