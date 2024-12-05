@@ -1,13 +1,11 @@
 import {
   BarChartIcon,
   Calendar,
-  Check,
   CheckCheck,
   Edit,
   Mail,
   MoreHorizontal,
   Mouse,
-  Plus,
   Target,
   Trash,
 } from "lucide-react";
@@ -49,33 +47,15 @@ import {
 } from "~/components/ui/table";
 import SidebarComp from "~/components/Sidebar";
 import { Dialog, DialogTrigger } from "~/components/ui/dialog";
-import { Label } from "~/components/ui/label";
 import { ChangeEventHandler, useState } from "react";
-import { CalendarComp } from "~/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import MetricCard from "~/components/MetricCard";
 import { Progress } from "~/components/ui/progress";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "~/components/ui/sheet";
-import { Separator } from "~/components/ui/separator";
 import { createCampaign, getCampaign } from "~/utils/actions";
 import { ActionFunctionArgs, LoaderFunction, json } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { setHours, setMinutes, parseISO, isAfter, isBefore } from "date-fns";
-
-// export const action = async ({ params }: ActionFunctionArgs) => {
-//   invariant(params.contactId, "Missing contactId param");
-//   await deleteCampaign();
-//   return redirect("/");
-// };
+import CreateCampaign from "~/components/CreateCampaignModal";
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
@@ -145,38 +125,21 @@ export const loader: LoaderFunction = async () => {
   return json(data);
 };
 
-export default function CampaignsPage() {
+export default function Dashboard() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [campaignSchedule, setCampaignSchedule] = useState<Date[]>([]);
   // const [campaigns, setCampaigns] = useState(campaignsData);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [selectedCampaign, setSelectedCampaign] = useState<any>({});
-  const [strategy, setStrategy] = useState<string>("Email");
-  const [freqValue, setFreqValue] = useState("Weekly");
-  const [timeValue, setTimeValue] = useState<string>("00:00");
 
   const campaigns = useLoaderData<typeof loader>();
 
-  // console.log(selectedCampaign.schedule.map((date) => new Date(date)));
   const filteredCampaigns = campaigns.filter(
     (campaign) =>
       campaign.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (statusFilter === "All" || campaign.status === statusFilter),
   );
-
-  const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const time = e.target.value;
-    if (!startDate) {
-      setTimeValue(time);
-      return;
-    }
-
-    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
-    const newSelectedDate = setHours(setMinutes(startDate, minutes), hours);
-    setStartDate(newSelectedDate);
-    setTimeValue(time);
-  };
 
   return (
     <SidebarComp>
@@ -203,120 +166,7 @@ export default function CampaignsPage() {
             </SelectContent>
           </Select>
         </div>
-        <Sheet>
-          <Button asChild>
-            <SheetTrigger onClick={() => setStartDate(undefined)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Create Campaign
-            </SheetTrigger>
-          </Button>
-          <SheetContent>
-            <Form method="post">
-              <SheetHeader>
-                <SheetTitle>Create new campaign</SheetTitle>
-                <SheetDescription>
-                  Insert the required inputs to create a new campaign
-                </SheetDescription>
-              </SheetHeader>
-              <Separator className="my-4" />
-              <div className="flex flex-col gap-2 py-1">
-                <div className="flex items-center gap-3">
-                  <Label htmlFor="name" className="text-md">
-                    Name:
-                  </Label>
-                  <Input placeholder="untitled" name="name" id="name" />
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Label htmlFor="strategy">Strategy</Label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="default"
-                        value={strategy}
-                        onClick={() => setStrategy("Email")}
-                      >
-                        {strategy}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => setStrategy("Email")}>
-                        Email
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => setStrategy("SMS")}>
-                        SMS
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <input type="text" name="strategy" value={strategy} hidden />
-                </div>
-                <div className="flex items-center gap-3">
-                  <Label htmlFor="freq">Frequency:</Label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="default" value={freqValue}>
-                        {freqValue}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => setFreqValue("Daily")}>
-                        Daily
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => setFreqValue("Weekly")}>
-                        Weekly
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => setFreqValue("Monthly")}>
-                        Monthly
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <input type="text" hidden value={freqValue} name="freq" />
-                </div>
-              </div>
-              <Separator />
-              <div className="py-2 gap-2 flex flex-col items-start">
-                <Label className="text-sm">Pick Start and End Date:</Label>
-                <Input
-                  type="time"
-                  value={timeValue}
-                  onChange={handleTimeChange}
-                  name="startTime"
-                />
-                <div className="flex justify-center items-center gap-3 py-3">
-                  <CalendarComp
-                    selected={startDate}
-                    onSelect={setStartDate}
-                    mode="single"
-                    footer={
-                      startDate ? `Selected: ${startDate}` : "Pick a day."
-                    }
-                  />
-                </div>
-              </div>
-              <Separator />
-              <input
-                type="text"
-                value={startDate?.toISOString()}
-                hidden
-                name="startDate"
-              />
-
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit" className="my-2">
-                    <span>
-                      <Check />
-                    </span>
-                    Save campaign
-                  </Button>
-                </SheetClose>
-              </SheetFooter>
-            </Form>
-          </SheetContent>
-        </Sheet>{" "}
+        <CreateCampaign />
       </div>
 
       <div className="grid gap-4 p-3 md:grid-cols-2 lg:grid-cols-3">
@@ -335,10 +185,10 @@ export default function CampaignsPage() {
           icon={BarChartIcon}
         />
         {/* <MetricCard
-            title="Total Leads"
-            value={campaigns.reduce((sum, c) => sum + c.leads, 0).toString()}
-            icon={Target}
-          /> */}
+              title="Total Leads"
+              value={campaigns.reduce((sum, c) => sum + c.leads, 0).toString()}
+              icon={Target}
+            /> */}
       </div>
       <div className="p-3">
         <Card>
@@ -362,7 +212,7 @@ export default function CampaignsPage() {
               </TableHeader>
               <TableBody>
                 {filteredCampaigns.map((campaign) => (
-                  <Dialog>
+                  <Dialog key={campaign.id}>
                     <DialogTrigger
                       onClick={() => {
                         setCampaignSchedule(campaign.schedule);
