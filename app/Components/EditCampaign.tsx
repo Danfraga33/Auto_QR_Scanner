@@ -1,4 +1,4 @@
-import { Dialog } from "./ui/dialog";
+import { Dialog, DialogClose } from "./ui/dialog";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -27,6 +27,14 @@ import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Edit } from "lucide-react";
 import { toast } from "~/hooks/use-toast";
 import { ToastAction } from "./ui/toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { useState } from "react";
 
 const EditCampaign = ({
   selectedCampaign,
@@ -34,6 +42,8 @@ const EditCampaign = ({
 }: {
   campaignSchedule: Date[];
 }) => {
+  const [freqValue, setFreqValue] = useState(selectedCampaign.freq);
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -60,9 +70,30 @@ const EditCampaign = ({
               Template
             </Label>
             <Input id="template" value="Template 1" className="col-span-3" />
-            <Label htmlFor="freq" className="text-right">
-              Frequency
-            </Label>
+
+            <Label htmlFor="freq">Frequency:</Label>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="default" value={freqValue}>
+                  {freqValue}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setFreqValue("Daily")}>
+                  Daily
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setFreqValue("Weekly")}>
+                  Weekly
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setFreqValue("Monthly")}>
+                  Monthly
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <input type="text" hidden value={freqValue} name="freq" />
+
             <Input
               id="freq"
               value={selectedCampaign.frequency ?? "Weekly"}
@@ -77,31 +108,14 @@ const EditCampaign = ({
         />
 
         <DialogFooter>
-          <AlertDialog key={selectedCampaign._id}>
-            <Button variant="secondary" className="text-gray-400" asChild>
-              <AlertDialogTrigger>Delete</AlertDialogTrigger>
-            </Button>
-            <AlertDialogContent aria-description="Deleting Campaign">
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  campaign.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <Form action="destroy" method="post">
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <Button variant="destructive" type="submit" asChild>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                  </Button>
-                </AlertDialogFooter>
-              </Form>
-            </AlertDialogContent>
-          </AlertDialog>
           <Button type="submit" variant="default">
             Save changes
-          </Button>
+          </Button>{" "}
+          <DialogClose>
+            <Button type="submit" variant="secondary">
+              Cancel
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
