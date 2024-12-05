@@ -44,7 +44,13 @@ export async function getCampaign() {
     // console.log(data);
     return data;
   } catch (err) {
-    console.error("Failed to fetch all campaigns");
+export async function deleteCampaign(id: string) {
+  try {
+    connectDB();
+    const result = await Campaign.deleteOne({ _id: id });
+    return { success: true, message: "All campaigns deleted", result };
+  } catch (error) {
+    return { success: false, message: "Failed to delete campaigns", error };
   }
 }
 
