@@ -25,6 +25,8 @@ import { CalendarComp } from "~/components/ui/calendar";
 import { Form } from "@remix-run/react";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Edit } from "lucide-react";
+import { toast } from "~/hooks/use-toast";
+import { ToastAction } from "./ui/toast";
 
 const EditCampaign = ({
   selectedCampaign,
@@ -52,14 +54,6 @@ const EditCampaign = ({
             <Input
               id="name"
               value={selectedCampaign.name}
-              className="col-span-3"
-            />
-            <Label htmlFor="status" className="text-right">
-              Status
-            </Label>
-            <Input
-              id="status"
-              value={selectedCampaign.status}
               className="col-span-3"
             />
             <Label htmlFor="template" className="text-right">
