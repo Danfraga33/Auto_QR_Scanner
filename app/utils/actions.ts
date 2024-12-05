@@ -1,7 +1,6 @@
 import Campaign from "~/Models/Campaign";
 import { connectDB } from "./db";
 import Accounts from "~/Models/Accounts";
-import { isAfter, parseISO } from "date-fns";
 
 export async function createProfile({
   email,
@@ -41,9 +40,25 @@ export async function getCampaign() {
   connectDB();
   try {
     const data = await Campaign.find();
-    // console.log(data);
     return data;
   } catch (err) {
+    console.error("Failed to fetch all campaigns", err);
+  }
+}
+
+export async function selectedCampaign(id: string) {
+  connectDB();
+  try {
+    const selectedCampaign = await Campaign.findOne({ id });
+    return selectedCampaign;
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to fetch selected campaign",
+      error,
+    };
+  }
+}
 export async function deleteCampaign(id: string) {
   try {
     connectDB();
