@@ -1,6 +1,18 @@
 import { LoaderFunction, json } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
-import { BarChart3, BarChartIcon, Calendar, Gauge, Trash } from "lucide-react";
+import {
+  BarChart3,
+  BarChartIcon,
+  Calendar,
+  CheckCheck,
+  Gauge,
+  Link,
+  Mail,
+  MailIcon,
+  MessageSquare,
+  Mouse,
+  Trash,
+} from "lucide-react";
 import { useState } from "react";
 import EditCampaign from "~/components/EditCampaign";
 import MetricCard from "~/components/MetricCard";
@@ -104,7 +116,7 @@ const SelectedCampaign = () => {
           </div>
         </div>
         <Separator />
-        <Tabs defaultValue="overview" className="w-full ">
+        <Tabs defaultValue="overview" className="w-full">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="performance">Performance</TabsTrigger>
@@ -145,39 +157,50 @@ const SelectedCampaign = () => {
                   <p>{campaignData.description}</p>
                 </CardContent>
               </Card>
-              <div className="flex flex-col w-full col-span-2 gap-1">
-                <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-                  Schedule
-                </h2>
-                <CalendarComp
-                  className="flex justify-center w-full"
-                  selected={filteredCampaign.schedule.map(
-                    (date: string) => new Date(date),
-                  )}
-                  mode="multiple"
-                />
+
+              <div className="flex-1 col-span-2 w-full">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Recent Activities</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-4">
+                      <li className="flex items-center">
+                        <MailIcon className="mr-2 h-5 w-5 text-muted-foreground" />
+                        <span>Email blast sent to 10,000 subscribers</span>
+                        <span className="ml-auto text-sm text-muted-foreground">
+                          2 days ago
+                        </span>
+                      </li>
+                      <li className="flex items-center">
+                        <MessageSquare className="mr-2 h-5 w-5 text-muted-foreground" />
+                        <span>
+                          Social media post published on Facebook and Instagram
+                        </span>
+                        <span className="ml-auto text-sm text-muted-foreground">
+                          4 days ago
+                        </span>
+                      </li>
+                      <li className="flex items-center">
+                        <Link className="mr-2 h-5 w-5 text-muted-foreground" />
+                        <span>New landing page created for the campaign</span>
+                        <span className="ml-auto text-sm text-muted-foreground">
+                          1 week ago
+                        </span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
               </div>
-              {/* <Card>
-                <CardHeader>
-                  <CardTitle>Channels</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="list-inside list-disc">
-                    {campaignData.channels.map((channel, index) => (
-                      <li key={index}>{channel}</li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card> */}
             </div>
           </TabsContent>
-          <TabsContent value="performance">
-            <div className="grid gap-4 md:grid-cols-2  lg:grid-cols-3">
+          <TabsContent value="performance" className="gap-4 flex flex-col">
+            <div className="grid gap-4 md:grid-cols-2  lg:grid-cols-2">
               <MetricCard
                 title="Conversion Rate"
                 value="18.5%"
                 icon={BarChart3}
-              />{" "}
+              />
               <MetricCard title="ROI" value="245%" icon={Gauge} />{" "}
               {/* <MetricCard
                 title="Total Conversions"
@@ -186,6 +209,11 @@ const SelectedCampaign = () => {
                   .toString()}
                 icon={BarChartIcon}
               /> */}
+            </div>
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 ">
+              <MetricCard title="Emails/SMS Sent" value="221" icon={Mail} />
+              <MetricCard title="Delivery Rate" value="98%" icon={CheckCheck} />
+              <MetricCard title="CTR" value="82%" icon={Mouse} />
             </div>
           </TabsContent>
           <TabsContent value="audience">
