@@ -1,18 +1,10 @@
-import { ComponentProps, ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarRail,
-} from "~/components/ui/sidebar";
 
-import NavCampaigns from "./NavCampaign";
-import { NavMain } from "./NavMain";
 import { Separator } from "./ui/separator";
 import {
   Breadcrumb,
@@ -21,27 +13,7 @@ import {
   BreadcrumbPage,
 } from "./ui/breadcrumb";
 import { useLocation } from "@remix-run/react";
-import CompanyName from "./CompanyName";
-import NavUser from "./NavUser";
-import marketingAppData from "../lib/data/marketingAppData.json";
-
-function SidebarLeft({ ...props }: ComponentProps<typeof Sidebar>) {
-  return (
-    <Sidebar className="border-r-0" {...props}>
-      <SidebarHeader>
-        <CompanyName />
-        <NavMain />
-      </SidebarHeader>
-      <SidebarContent>
-        <NavCampaigns />
-        {/* <NavLeads /> */}
-        {/* <NavAnalytics /> */}
-      </SidebarContent>
-      <NavUser user={marketingAppData.user} />
-      <SidebarRail />
-    </Sidebar>
-  );
-}
+import SidebarLeft from "./SidebarLeft";
 
 const SidebarComp = ({ children }: { children: ReactNode }) => {
   const path = useLocation()
