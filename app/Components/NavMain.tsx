@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
-import items from "~/lib/data/Nav.json";
+import navLinks from "~/lib/data/Nav.json";
 import { Link } from "@remix-run/react";
 export function NavMain() {
   const [isActive, setIsActive] = useState("");
   console.log(isActive);
   return (
     <SidebarMenu>
-      {items.map((item) => (
+      {navLinks.map((item) => (
         <SidebarMenuItem key={item.title}>
           <SidebarMenuButton
             className="hover:underline hover:transition-all"
