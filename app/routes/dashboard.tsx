@@ -224,12 +224,7 @@ export default function CampaignsPage() {
                   <Label htmlFor="name" className="text-md">
                     Name:
                   </Label>
-                  <Input
-                    placeholder="untitled"
-                    name="name"
-                    defaultValue="untitled"
-                    id="name"
-                  />
+                  <Input placeholder="untitled" name="name" id="name" />
                 </div>
 
                 <div className="flex items-center gap-3">
