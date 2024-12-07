@@ -1,15 +1,8 @@
-import {
-  SignInButton,
-  SignOutButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/remix";
 import { type MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { ArrowRight, BarChart, CheckCircle, Target, Users } from "lucide-react";
 import AuthComponent from "~/components/AuthComponent";
+import Header from "~/components/LandingPage/Header";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -31,32 +24,8 @@ export default function Index() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <header className="px-4 lg:px-6 h-14 flex items-center">
-          <Link className="flex items-center justify-center" to="#">
-            <Target className="h-6 w-6" />
-            <span className="sr-only">MarketPro</span>
-          </Link>
-          <nav className="ml-auto flex gap-4 sm:gap-6">
-            <Link
-              className="text-sm font-medium hover:underline underline-offset-4"
-              to="#features"
-            >
-              Features
-            </Link>
-            <Link
-              className="text-sm font-medium hover:underline underline-offset-4"
-              to="#pricing"
-            >
-              Pricing
-            </Link>
-            <Link
-              className="text-sm font-medium hover:underline underline-offset-4"
-              to="#testimonials"
-            >
-              Testimonials
-            </Link>
-          </nav>
-        </header>
+        <Header />
+
         <main className="flex-1">
           <section className="flex items-center flex-col mx-12 w-full py-12 md:py-24 lg:py-32 xl:py-48">
             <div className="container px-4 md:px-6">
@@ -291,7 +260,7 @@ export default function Index() {
           </section>
           <section className="flex flex-col mx-12 items-center w-full py-12 md:py-24 lg:py-32">
             <div className="container px-4 md:px-6">
-              <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="f lex flex-col items-center space-y-4 text-center">
                 <div className="space-y-2">
                   <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
                     Ready to Boost Your Marketing?
