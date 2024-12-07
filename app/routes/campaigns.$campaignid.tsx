@@ -1,18 +1,14 @@
-import { LoaderFunction, json } from "@remix-run/node";
+import { LoaderFunction, json, redirect } from "@remix-run/node";
 import { useLoaderData, useLocation } from "@remix-run/react";
 import {
   BarChart3,
-  BarChartIcon,
-  Calendar,
   CheckCheck,
   Gauge,
   Link,
   Mail,
   MailIcon,
   MessageSquare,
-  MoreHorizontal,
   Mouse,
-  Trash,
 } from "lucide-react";
 import { useState } from "react";
 import EditCampaign from "~/components/EditCampaign";
@@ -22,14 +18,6 @@ import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Dialog, DialogTrigger } from "~/components/ui/dialog";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import {
   Table,
   TableBody,
   TableCell,
@@ -38,16 +26,38 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { getCampaign } from "~/utils/actions";
+import { getCampaign, updateCampaign } from "~/utils/actions";
 import leads from "~/lib/data/Leads.json";
 import { Separator } from "~/components/ui/separator";
 import DeleteCampaignButton from "~/components/DeleteCampaignButton";
-import { Button } from "~/components/ui/button";
+import { ActionFunctionArgs } from "@remix-run/node";
 
 export const loader: LoaderFunction = async () => {
   const data = await getCampaign();
   return json(data);
 };
+
+export async function action({ request, params }: ActionFunctionArgs) {
+  const campaignId = params.campaignid;
+  if (!campaignId) return "Please select campaign";
+  const body = await request.formData();
+
+  const name = body.get("name");
+  const freq = body.get("freq");
+
+  try {
+    const updatedCampaign = await updateCampaign({ campaignId, name, freq });
+    console.log(updatedCampaign);
+
+    return redirect("/dashboard");
+  } catch (error) {
+    return {
+      success: false,
+      message: "Error updating campaing:",
+      error,
+    };
+  }
+}
 
 const SelectedCampaign = () => {
   const [campaignSchedule, setCampaignSchedule] = useState<Date[]>([]);
@@ -60,7 +70,6 @@ const SelectedCampaign = () => {
     (campaign) => campaign._id === id,
   );
   const filteredCampaign = filteredCampaignArr[0];
-  console.log(filteredCampaign);
 
   const campaignData = {
     id: 1,
@@ -110,10 +119,7 @@ const SelectedCampaign = () => {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <EditCampaign
-              selectedCampaign={filteredCampaign}
-              campaignSchedule={filteredCampaign.schedule}
-            />
+            <EditCampaign selectedCampaign={filteredCampaign} />
             <DeleteCampaignButton selectedCampaign={filteredCampaign} />
           </div>
         </div>

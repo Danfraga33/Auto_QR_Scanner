@@ -36,13 +36,52 @@ export async function createProfile({
   }
 }
 
+export async function updateCampaign({
+  campaignId,
+  name,
+  freq,
+}: {
+  name: FormDataEntryValue | null;
+  freq: FormDataEntryValue | null;
+  campaignId: string;
+}) {
+  connectDB();
+  const updatedData = { name, freq };
+  try {
+    const updatedCampaign = await Campaign.findByIdAndUpdate(
+      campaignId,
+      updatedData,
+      {
+        new: true,
+        upsert: true,
+      },
+    );
+
+    return {
+      success: true,
+      message: "Successfully updated campaign",
+      updatedCampaign,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to update campaign",
+      error,
+    };
+  }
+}
+
 export async function getCampaign() {
   connectDB();
   try {
     const data = await Campaign.find();
     return data;
   } catch (err) {
-    console.error("Failed to fetch all campaigns", err);
+    return {
+      success: false,
+      message: "Failed to fetch all campaigns",
+      err,
+    };
   }
 }
 
