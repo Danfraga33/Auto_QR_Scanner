@@ -4,7 +4,7 @@ import navLinks from "~/lib/data/Nav.json";
 import { Link } from "@remix-run/react";
 export function NavMain() {
   const [isActive, setIsActive] = useState("");
-  console.log(isActive);
+
   return (
     <SidebarMenu>
       {navLinks.map((item) => (
