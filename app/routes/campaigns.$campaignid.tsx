@@ -60,9 +60,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 const SelectedCampaign = () => {
-  const [campaignSchedule, setCampaignSchedule] = useState<Date[]>([]);
-  const [selectedCampaign, setSelectedCampaign] = useState<any>({});
-
   const campaigns = useLoaderData<typeof loader>();
   const location = useLocation();
   const id = location.pathname.split("/")[2];
