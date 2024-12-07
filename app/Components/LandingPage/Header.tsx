@@ -1,6 +1,12 @@
 import React from "react";
 import AuthComponent from "../AuthComponent";
-import { SignOutButton } from "@clerk/remix";
+import {
+  SignInButton,
+  SignOutButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+} from "@clerk/remix";
 import { Button } from "../ui/button";
 import { Link } from "@remix-run/react";
 import { Target } from "lucide-react";
@@ -26,15 +32,23 @@ const Header = () => {
           >
             Testimonials
           </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            to="/Dashboard"
-          >
-            Dashboard
-          </Link>
-          <Button variant="secondary">
-            <SignOutButton />
-          </Button>
+          <SignedIn>
+            {" "}
+            <Link
+              className="text-sm font-medium hover:underline underline-offset-4"
+              to="/Dashboard"
+            >
+              Dashboard
+            </Link>
+            <Button variant="secondary">
+              <SignOutButton />
+            </Button>
+          </SignedIn>
+          <SignedOut>
+            <Button>
+              <SignInButton forceRedirectUrl="/" />
+            </Button>
+          </SignedOut>
         </nav>
       </header>
     </>

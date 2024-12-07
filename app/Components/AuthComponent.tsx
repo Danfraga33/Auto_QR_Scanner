@@ -27,7 +27,7 @@ const AuthComponent = () => {
       <SignedOut>
         <p>You are signed out</p>
         <div>
-          <SignInButton forceRedirectUrl="/asd" />
+          <SignInButton forceRedirectUrl="/" />
         </div>
 
         <div>
