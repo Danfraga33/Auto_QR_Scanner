@@ -63,17 +63,17 @@ Components
 #### To Do
 
 - Create new business profile form page
+- Protect Routes
 - Save data from Clerk to MongoDB with Webhooks
 - Create custom signup page on clerk to get additional information.
 - Fix Connection Strings for seperate connections
 - Save Business Profiles to DB
+- Toast function when editing or saving.
 - Campaign data is being saved to customer data
-- Make campaign creation work.
 - Make auth section (Middleware)
-- Set up Email/Sms with twillo
-- add dark mode
-- Create Landing Page
-- Create edit campaign page
+- Set up Email/SMS with twillo
+- Add dark mode
+- Incorporate Zapier
 
 #### To do Later
 
