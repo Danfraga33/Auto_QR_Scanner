@@ -62,15 +62,14 @@ Components
 
 #### To Do
 
-- Create new business profile form page
-- Protect Routes
-- Save data from Clerk to MongoDB with Webhooks
-- Create custom signup page on clerk to get additional information.
+- Create new business profile form page (auth)
+- Protect Routes (auth)
+- Save data from Clerk to MongoDB with Webhooks (auth)
+- Create custom signup page on clerk to get additional information. (auth)
 - Fix Connection Strings for seperate connections
-- Save Business Profiles to DB
+- Save Business Profiles to DB (auth)
 - Toast function when editing or saving.
-- Campaign data is being saved to customer data
-- Make auth section (Middleware)
+- Make auth section (Middleware) (auth)
 - Set up Email/SMS with twillo
 - Add dark mode
 - Incorporate Zapier
