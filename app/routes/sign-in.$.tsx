@@ -7,7 +7,6 @@ const SignInPage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">
-      <h1>Sign Up route</h1>
       <SignIn />
     </div>
   );
