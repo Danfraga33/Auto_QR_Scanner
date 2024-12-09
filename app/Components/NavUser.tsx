@@ -55,8 +55,7 @@ export default function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const { isLoaded, isSignedIn, user } = useUser();
-  console.log(user?.emailAddresses[0].emailAddress);
+  const { isLoaded, user } = useUser();
 
   function getInitials(fullName: string) {
     const initials: string[] = [];
