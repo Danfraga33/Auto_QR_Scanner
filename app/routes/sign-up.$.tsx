@@ -19,6 +19,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const signUp = formData.get("data");
+  console.log({ email, password, signUp });
   return null;
 }
 
@@ -80,6 +82,7 @@ const SignupPage = () => {
               <Input id="password" type="password" name="password" />
             </div>
           </CardContent>
+          <input type="hidden" name="data" value={JSON.stringify(signUp)} />
           <CardFooter>
             <Button className="w-full">Create account</Button>
           </CardFooter>
