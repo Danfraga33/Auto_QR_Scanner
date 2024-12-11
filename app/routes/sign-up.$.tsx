@@ -15,22 +15,13 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
-// export async function action({ request }: ActionFunctionArgs) {
-//   const formData = await request.formData();
-//   const email = formData.get("email") as string;
-//   const password = formData.get("password") as string;
-//   console.log({ email, password });
-//   return null;
-// }
-
 const SignupPage = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  console.log({ email, password });
+  const [PendingVerification, setPendingVerification] = useState(false);
 
   const handleNewUser = async ({
     email,
@@ -45,6 +36,12 @@ const SignupPage = () => {
         password: password,
       });
 
+      await signUp?.prepareEmailAddressVerification({
+        strategy: "email_code",
+      });
+
+      setPendingVerification(true);
+
       return {
         message: "User Successfully Added",
         status: data,
@@ -56,6 +53,7 @@ const SignupPage = () => {
       };
     }
   };
+
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <Card>
@@ -65,7 +63,7 @@ const SignupPage = () => {
             Enter your email below to create your account
           </CardDescription>
         </CardHeader>
-        <Form method="post">
+        <form>
           <CardContent className="grid gap-4">
             <div className="grid grid-cols-2 gap-6">
               <Button variant="outline">
@@ -116,7 +114,7 @@ const SignupPage = () => {
               Create account
             </Button>
           </CardFooter>
-        </Form>
+        </form>
         {error && <p className="text-red-500">{error}</p>}
         {/* {success && <p className="text-green-500">{success}</p>} */}
       </Card>
