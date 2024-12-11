@@ -73,6 +73,7 @@ Components
 - Set up Email/SMS with twillo
 - Add dark mode
 - Incorporate Zapier
+- Change UI based on [this](https://dribbble.com/shots/22991733-HR-Dashboard-Employee-Management B` )
 
 #### To do Later
 
