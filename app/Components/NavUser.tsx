@@ -25,7 +25,6 @@ import { LoaderFunction, redirect } from "@remix-run/node";
 import { getAuth } from "@clerk/remix/ssr.server";
 import { useUser } from "@clerk/remix";
 import { createClerkClient } from "@clerk/remix/api.server";
-import { clerkClient } from "@clerk/clerk-sdk-node";
 
 export const loader: LoaderFunction = async (args) => {
   // Use getAuth() to retrieve the user's ID
@@ -45,15 +44,7 @@ export const loader: LoaderFunction = async (args) => {
   return { serialisedUser: JSON.stringify(user) };
 };
 
-export default function NavUser({
-  signedInUser,
-}: {
-  signedInUser: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export default function NavUser() {
   const { isMobile } = useSidebar();
   const { isLoaded, user } = useUser();
 

@@ -13,7 +13,7 @@ import { ComponentProps } from "react";
 
 function SidebarLeft({ ...props }: ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar className="border-r-0" {...props}>
+    <Sidebar className="border-r-0 bg-gray-200/50" {...props}>
       <SidebarHeader>
         <CompanyName />
         <NavMain />
@@ -23,7 +23,7 @@ function SidebarLeft({ ...props }: ComponentProps<typeof Sidebar>) {
         {/* <NavLeads /> */}
         {/* <NavAnalytics /> */}
       </SidebarContent>
-      <NavUser user={marketingAppData.user} />
+      <NavUser />
       <SidebarRail />
     </Sidebar>
   );
