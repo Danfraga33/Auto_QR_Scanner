@@ -1,5 +1,5 @@
 import { useSignUp } from "@clerk/remix";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { Computer, Github } from "lucide-react";
 import { useState } from "react";
@@ -41,7 +41,7 @@ const SignupPage = () => {
       });
 
       setPendingVerification(true);
-
+      redirect("/");
       return {
         message: "User Successfully Added",
         status: data,
