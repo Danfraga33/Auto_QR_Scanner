@@ -15,28 +15,47 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const signUp = formData.get("data");
-  console.log({ email, password, signUp });
-  return null;
-}
+// export async function action({ request }: ActionFunctionArgs) {
+//   const formData = await request.formData();
+//   const email = formData.get("email") as string;
+//   const password = formData.get("password") as string;
+//   console.log({ email, password });
+//   return null;
+// }
 
 const SignupPage = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  // const navigation = useNavigation();
 
-  if (!isLoaded)
-    return (
-      <>
-        <p className="flex items-center justify-center h-screen">Loading... </p>
-      </>
-    );
+  console.log({ email, password });
 
+  const handleNewUser = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const data = await signUp?.create({
+        emailAddress: email,
+        password: password,
+      });
+
+      return {
+        message: "User Successfully Added",
+        status: data,
+      };
+    } catch (error) {
+      return {
+        message: "Unable to create new client",
+        error: error,
+      };
+    }
+  };
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <Card>
@@ -68,6 +87,7 @@ const SignupPage = () => {
                 </span>
               </div>
             </div>
+
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -75,16 +95,26 @@ const SignupPage = () => {
                 type="email"
                 placeholder="hook@CRM.com"
                 name="email"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" name="password" />
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
           </CardContent>
-          <input type="hidden" name="data" value={JSON.stringify(signUp)} />
           <CardFooter>
-            <Button className="w-full">Create account</Button>
+            <Button
+              className="w-full"
+              onClick={() => handleNewUser({ email, password })}
+            >
+              Create account
+            </Button>
           </CardFooter>
         </Form>
         {error && <p className="text-red-500">{error}</p>}
