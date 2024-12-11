@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 import navLinks from "~/lib/data/Nav.json";
 import { Link } from "@remix-run/react";
+import { CircleGauge } from "lucide-react";
 export function NavMain() {
   const [isActive, setIsActive] = useState("");
 
@@ -18,7 +19,7 @@ export function NavMain() {
             asChild
           >
             <Link to={item.href ?? "/"}>
-              <item.icon />
+              <CircleGauge />
 
               <span>{item.title}</span>
             </Link>
