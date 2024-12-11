@@ -1,17 +1,15 @@
-import React from "react";
-import AuthComponent from "../AuthComponent";
 import {
   SignInButton,
   SignOutButton,
-  SignUpButton,
   SignedIn,
   SignedOut,
+  useAuth,
 } from "@clerk/remix";
 import { Button } from "../ui/button";
 import { Link } from "@remix-run/react";
 import { Target } from "lucide-react";
-import { Card } from "../ui/card";
 const Header = () => {
+  const { isLoaded, userId } = useAuth();
   return (
     <>
       <header className="px-4 lg:px-6 h-14 flex items-center">
@@ -32,23 +30,29 @@ const Header = () => {
           >
             Testimonials
           </Link>
-          <SignedIn>
-            {" "}
-            <Link
-              className="text-sm font-medium hover:underline underline-offset-4"
-              to="/Dashboard"
-            >
-              Dashboard
-            </Link>
-            <Button variant="secondary">
-              <SignOutButton />
-            </Button>
-          </SignedIn>
-          <SignedOut>
-            <Button>
-              <SignInButton forceRedirectUrl="/" />
-            </Button>
-          </SignedOut>
+
+          {isLoaded ? (
+            <>
+              <SignedIn>
+                <Link
+                  className="text-sm font-medium hover:underline underline-offset-4"
+                  to="/Dashboard"
+                >
+                  Dashboard
+                </Link>
+                <Button variant="secondary">
+                  <SignOutButton />
+                </Button>
+              </SignedIn>
+              <SignedOut>
+                <Button>
+                  <SignInButton forceRedirectUrl="/" />
+                </Button>
+              </SignedOut>
+            </>
+          ) : (
+            ""
+          )}
         </nav>
       </header>
     </>
