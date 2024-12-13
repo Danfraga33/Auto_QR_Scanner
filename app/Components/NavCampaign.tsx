@@ -19,13 +19,17 @@ export const loader: LoaderFunction = async () => {
 };
 
 export default function NavCampaigns() {
-  const campaigns = useLoaderData<typeof loader>();
+  // const campaigns = useLoaderData<typeof loader>();
+  // const activeCampaigns = campaigns.filter(
+  //   (campaign) => campaign.status.toLowerCase() === "scheduled",
+  // );
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Campaigns</SidebarGroupLabel>
+      <SidebarGroupLabel>Active Campaigns</SidebarGroupLabel>
       <SidebarGroupContent>
-        <SidebarMenu>
-          {campaigns.map((campaign) => (
+        {/* <SidebarMenu>
+          {activeCampaigns.map((campaign) => (
             <SidebarMenuItem key={campaign.id}>
               <SidebarMenuButton asChild>
                 <NavLink to={`/campaigns/${campaign._id}`}>
@@ -45,8 +49,7 @@ export default function NavCampaigns() {
               </Badge>
             </SidebarMenuItem>
           ))}
-          <SidebarMenuItem></SidebarMenuItem>
-        </SidebarMenu>
+        </SidebarMenu> */}
       </SidebarGroupContent>
     </SidebarGroup>
   );
