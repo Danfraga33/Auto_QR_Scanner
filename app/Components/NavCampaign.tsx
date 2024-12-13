@@ -19,10 +19,10 @@ export const loader: LoaderFunction = async () => {
 };
 
 export default function NavCampaigns() {
-  // const campaigns = useLoaderData<typeof loader>();
-  // const activeCampaigns = campaigns.filter(
-  //   (campaign) => campaign.status.toLowerCase() === "scheduled",
-  // );
+  const campaigns = useLoaderData<typeof loader>();
+  const activeCampaigns = campaigns.filter(
+    (campaign) => campaign.status.toLowerCase() === "scheduled",
+  );
 
   return (
     <SidebarGroup>
