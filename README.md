@@ -62,6 +62,7 @@ Components
 
 #### To Do
 
+- Follow User journey
 - Create new business profile form page (auth)
 - Protect Routes (auth)
 - Save data from Clerk to MongoDB with Webhooks (auth)
