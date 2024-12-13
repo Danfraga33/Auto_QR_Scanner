@@ -32,8 +32,8 @@ Components
 
 - User logins in or if no account, user signs up - putting in details such as phone number, email, business name and more. (Clerk Auth + Webhook)
 - User is then redirected to dashboard
-- User gets a custom QR Code per campaign they make (later can select their own hook)
 - Customers signup, adding them to the database
+- User picks a hook, and gets redirected to make the campaign (later can select their own hook) (Only QR code for now)
 - User creates campaign (selecting audience, method, dates, frequency) - ONLY NEWSLETTER (MVP) -- Selects start date then selects either weekly, monthly or daily
 - User Presses "Activate Campaign" button to activate
 - User can delete campaign
@@ -49,6 +49,7 @@ Components
 
 - Make.com
 - Phatom Builder: PAID (Lead collection)
+- Trigger.Dev (THIS ONE)
 - Anymail finder
 - Instantly: Lead Automated Outreach
 - Twillo communication API: Send out SMS and Email
