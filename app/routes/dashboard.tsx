@@ -193,7 +193,7 @@ export default function Dashboard() {
       <div className="p-3">
         <Card>
           <CardHeader>
-            <CardTitle>Campaign List</CardTitle>
+            <CardTitle className="text-3xl">Campaign List</CardTitle>
             <CardDescription>Manage your marketing campaigns</CardDescription>
           </CardHeader>
           <CardContent>
