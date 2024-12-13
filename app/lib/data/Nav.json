@@ -3,5 +3,16 @@
     "title": "Dashboard",
     "icon": "CircleGauge",
     "href": "/dashboard"
+  },
+  { "title": "Campaigns", "icon": "NotebookPen", "href": "/dashboard" },
+  {
+    "title": "Customers",
+    "icon": "Users",
+    "href": "/Customers"
+  },
+  {
+    "title": "Hooks",
+    "icon": "Webhook",
+    "href": "/Hooks"
   }
 ]
