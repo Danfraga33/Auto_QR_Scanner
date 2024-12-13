@@ -7,12 +7,14 @@ export default function CompanyName() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton className="w-fit px-1.5">
+        <SidebarMenuButton className="w-fit px-1.5 py-6">
           <div className="flex aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-            <company.logo className="size-3" />
+            <company.logo className="size-10" />
           </div>
           <Link to="/">
-            <span className="truncate font-semibold">{company.name}</span>
+            <span className="text-2xl  truncate font-semibold">
+              {company.name}
+            </span>
           </Link>
         </SidebarMenuButton>
       </SidebarMenuItem>
