@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "QR Code",
+    "description": "QR Code ready to be scanned by customers",
+    "status": "Active",
+    "numberOfCampaigns": 1
+  },
+  {
+    "id": 2,
+    "title": "Email",
+    "description": "Email to be sent to cold customers",
+    "status": "Inactive",
+    "numberOfCampaigns": 0
+  }
+]
