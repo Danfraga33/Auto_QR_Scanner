@@ -65,6 +65,7 @@ Components
 
 - Follow User journey
 - Create new business profile form page (auth)
+- Move to SQL
 - Protect Routes (auth)
 - Save data from Clerk to MongoDB with Webhooks (auth)
 - Create custom signup page on clerk to get additional information. (auth)
