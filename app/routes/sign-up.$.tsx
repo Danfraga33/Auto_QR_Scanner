@@ -73,7 +73,7 @@ const SignupPage = () => {
       }
       if (completeSignup.status !== "complete") {
         await setActive({ session: completeSignup.createdSessionId });
-        navigate("/");
+        navigate("/Dashboard");
       }
     } catch (error: any) {
       console.log(JSON.stringify(error));

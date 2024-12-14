@@ -1,6 +1,7 @@
 import {
   SignInButton,
   SignOutButton,
+  SignUpButton,
   SignedIn,
   SignedOut,
   useAuth,
@@ -45,8 +46,11 @@ const Header = () => {
                 </Button>
               </SignedIn>
               <SignedOut>
-                <Button>
+                <Button variant="outline">
                   <SignInButton forceRedirectUrl="/" />
+                </Button>
+                <Button>
+                  <Link to="/sign-up">Sign Up</Link>
                 </Button>
               </SignedOut>
             </>
