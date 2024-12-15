@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "../ui/button";
+import { Link } from "@remix-run/react";
 
 const Hero = () => {
   return (
@@ -9,7 +10,7 @@ const Hero = () => {
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
             Supercharge Your Marketing Campaigns
           </h1>
-          <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+          <p className="mx-auto max-w-[700px] text-gray-500 dark:text-gray-400 md:text-xl">
             MarketPro empowers you to craft irresistible hooks, target your
             leads precisely, and launch high-converting campaigns effortlessly.
             Drive engagement, maximize ROI, and turn prospects into loyal
@@ -17,7 +18,9 @@ const Hero = () => {
           </p>
 
           <div className="space-x-4">
-            <Button>Get Started</Button>
+            <Button asChild>
+              <Link to="campaigns">Get Started</Link>
+            </Button>
             <Button variant="outline">Learn More</Button>
           </div>
         </div>
