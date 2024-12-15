@@ -20,19 +20,11 @@ export function ProjectCard({
   numberOfCampaigns,
 }: ProjectCardProps) {
   return (
-    <Card className="shadow-primary">
+    <Card className={`${status == "Active" ? "shadow-primary" : null}`}>
       <CardHeader>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <CardTitle>{title}</CardTitle>
-          <Badge
-            variant={
-              status === "Active"
-                ? "default"
-                : status === "Inactive"
-                  ? "secondary"
-                  : "destructive"
-            }
-          >
+          <Badge variant={status === "Active" ? "default" : "outline"}>
             {status}
           </Badge>
         </div>
