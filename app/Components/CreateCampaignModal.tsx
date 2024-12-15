@@ -25,12 +25,14 @@ import { Separator } from "~/components/ui/separator";
 import { Form } from "@remix-run/react";
 import { ChangeEventHandler, useState } from "react";
 import { setHours, setMinutes } from "date-fns";
+import Hooks from "~/lib/data/Hooks.json";
 
 const CreateCampaign = () => {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [strategy, setStrategy] = useState<string>("Email");
   const [freqValue, setFreqValue] = useState("Weekly");
   const [timeValue, setTimeValue] = useState<string>("00:00");
+  const [hook, setHook] = useState("");
   const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const time = e.target.value;
     if (!startDate) {
@@ -68,7 +70,31 @@ const CreateCampaign = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <Label htmlFor="strategy">Strategy</Label>
+              <Label htmlFor="hook">Hook</Label>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="default"
+                    value="as"
+                    onClick={() => setHook("Email")}
+                  >
+                    Hook:
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {Hooks.map((hook) => (
+                    <DropdownMenuItem onClick={() => setStrategy(hook.title)}>
+                      {hook.title}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <input type="text" name="hook" value={strategy} hidden />
+            </div>
+            <div className="flex items-center gap-3">
+              <Label htmlFor="strategy">Strategy:</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -117,7 +143,7 @@ const CreateCampaign = () => {
             </div>
           </div>
           <Separator />
-          <div className="py-2 gap-2 flex flex-col items-start">
+          <div className="flex flex-col items-start gap-2 py-2">
             <Label className="text-sm">Pick Start and End Date:</Label>
             <Input
               type="time"
@@ -125,7 +151,7 @@ const CreateCampaign = () => {
               onChange={handleTimeChange}
               name="startTime"
             />
-            <div className="flex justify-center items-center gap-3 py-3">
+            <div className="flex items-center justify-center gap-3 py-3">
               <CalendarComp
                 selected={startDate}
                 onSelect={setStartDate}
