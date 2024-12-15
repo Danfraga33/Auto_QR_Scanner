@@ -1,68 +1,79 @@
 <mxfile host="65bd71144e">
     <diagram id="kpr3hiRJE_4LKQ-kQhR1" name="Page-1">
-        <mxGraphModel dx="1649" dy="732" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1418" dy="613" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="26" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="22" target="25">
+                <mxCell id="26" value="" style="edgeStyle=none;html=1;" parent="1" source="22" target="25" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="22" value="" style="shape=actor;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="40" y="360" width="40" height="60" as="geometry"/>
+                <mxCell id="22" value="" style="shape=actor;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="25" y="290" width="40" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="28" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="25" target="27">
+                <mxCell id="28" value="" style="edgeStyle=none;html=1;" parent="1" source="25" target="27" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="25" value="" style="shape=singleArrow;whiteSpace=wrap;html=1;arrowWidth=0.4;arrowSize=0.4;" vertex="1" parent="1">
-                    <mxGeometry x="140" y="360" width="140" height="60" as="geometry"/>
+                <mxCell id="25" value="" style="shape=singleArrow;whiteSpace=wrap;html=1;arrowWidth=0.4;arrowSize=0.4;" parent="1" vertex="1">
+                    <mxGeometry x="125" y="290" width="140" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="30" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="27" target="29">
+                <mxCell id="30" value="" style="edgeStyle=none;html=1;startArrow=none;" parent="1" source="27" target="29" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="155" y="430" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="27" value="Makes An Account" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="290" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="" style="edgeStyle=none;html=1;" parent="1" source="29" target="31" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="27" value="Makes An Account" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="370" y="360" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="32" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="29" target="31">
+                <mxCell id="34" value="" style="edgeStyle=none;html=1;" parent="1" source="29" target="33" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="34" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="29" target="33">
+                <mxCell id="36" value="" style="edgeStyle=none;html=1;" parent="1" source="29" target="35" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="36" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="29" target="35">
+                <mxCell id="47" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.03;entryY=0.561;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="29" target="46" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="29" value="Creates Campaign" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="570" y="360" width="120" height="60" as="geometry"/>
+                <mxCell id="29" value="Creates Campaign" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="355" y="400" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="31" value="Chooses Hook" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-                    <mxGeometry x="680" y="260" width="100" height="100" as="geometry"/>
+                <mxCell id="31" value="Chooses Hook" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="465" y="220" width="100" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="33" value="Chooses CRON Time" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-                    <mxGeometry x="670" y="420" width="120" height="120" as="geometry"/>
+                <mxCell id="33" value="Chooses CRON Time" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="545" y="240" width="120" height="120" as="geometry"/>
                 </mxCell>
-                <mxCell id="39" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="35" target="38">
+                <mxCell id="39" value="" style="edgeStyle=none;html=1;" parent="1" source="35" target="38" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="40" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="35" target="37">
+                <mxCell id="40" value="" style="edgeStyle=none;html=1;" parent="1" source="35" target="37" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="42" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="35" target="41">
+                <mxCell id="42" value="" style="edgeStyle=none;html=1;" parent="1" source="35" target="41" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="35" value="Data Is shown" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="570" y="630" width="120" height="60" as="geometry"/>
+                <mxCell id="35" value="Data Is shown" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="555" y="560" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="37" value="Conversions&lt;br&gt;" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-                    <mxGeometry x="730" y="680" width="110" height="110" as="geometry"/>
+                <mxCell id="37" value="Conversions&lt;br&gt;" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="715" y="610" width="110" height="110" as="geometry"/>
                 </mxCell>
-                <mxCell id="38" value="Emails Sent" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-                    <mxGeometry x="570" y="760" width="120" height="120" as="geometry"/>
+                <mxCell id="38" value="Emails Sent" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="555" y="690" width="120" height="120" as="geometry"/>
                 </mxCell>
-                <mxCell id="41" value="Emails Visited" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-                    <mxGeometry x="350" y="600" width="120" height="120" as="geometry"/>
+                <mxCell id="41" value="Emails Visited" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="335" y="530" width="120" height="120" as="geometry"/>
                 </mxCell>
-                <mxCell id="43" value="MVP&lt;br&gt;1. QR Code&lt;br&gt;2. Create Campaigns&lt;br&gt;3. Edit/Delete Campaigns&lt;br&gt;4. MongoDB" style="shape=display;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="43" value="MVP&lt;br&gt;1. QR Code&lt;br&gt;2. Create Campaigns&lt;br&gt;3. Edit/Delete Campaigns&lt;br&gt;4. MongoDB" style="shape=display;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="20" y="50" width="780" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" value="Chooses an Audience" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
+                    <mxGeometry x="575" y="360" width="120" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" value="MVP&lt;br&gt;&lt;br&gt;1. QR Code&lt;br&gt;2. All Audience" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="25" y="430" width="160" height="260" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
